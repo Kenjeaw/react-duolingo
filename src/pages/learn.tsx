@@ -621,7 +621,7 @@ const UnitHeader = ({
         </div>
         <div
           className={[
-            "flex items-center gap-3 rounded-2xl border-2 border-b-4 p-3 transition hover:text-gray-100",
+            "flex items-center gap-3 rounded-2xl border-2 p-3",
             borderColor,
           ].join(" ")}
         >

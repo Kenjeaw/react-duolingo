@@ -188,8 +188,8 @@ const LoginScreen = ({
                       {ageTooltipShown && (
                         <div className="absolute -right-5 top-full z-10 w-72 rounded-2xl border-2 border-gray-200 bg-white p-4 text-center text-xs leading-5 text-gray-800">
                           Providing your age ensures you get the right Duolingo
-                          experience. For more details, please visit our{" "}
-                          <span className="text-blue-700">Privacy Policy</span>
+                          experience. For more details, please visit our
+                          Privacy Policy.
                         </div>
                       )}
                     </button>
@@ -254,11 +254,8 @@ const LoginScreen = ({
             </button>
           </div>
           <p className="text-center text-xs leading-5 text-gray-400">
-            By signing in to Duolingo, you agree to our{" "}
-            <span className="font-bold">Terms</span>{" "}
-            and{" "}
-            <span className="font-bold">Privacy Policy</span>
-            .
+            By signing in to Duolingo, you agree to our Terms and Privacy
+            Policy.
           </p>
           <p className="text-center text-xs leading-5 text-gray-400">
             This site is protected by reCAPTCHA Enterprise and the Google{" "}

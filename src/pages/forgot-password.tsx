@@ -70,7 +70,7 @@ const ForgotPassword: NextPage = () => {
                 >
                   Get started
                 </Link>
-                <div className="min-w-max cursor-pointer rounded-b-2xl border-t-2 border-gray-300 px-5 py-2 hover:bg-gray-100">
+                <div className="min-w-max rounded-b-2xl border-t-2 border-gray-300 px-5 py-2">
                   Site language: English
                 </div>
               </div>

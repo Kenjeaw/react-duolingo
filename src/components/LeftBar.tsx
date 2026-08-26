@@ -86,11 +86,11 @@ export const LeftBar = ({ selectedTab }: { selectedTab: Tab | null }) => {
               ].join(" ")}
             >
               <div className="flex flex-col py-2">
-                <div className="flex items-center gap-4 px-5 py-2 text-left uppercase hover:bg-gray-100">
+                <div className="flex items-center gap-4 px-5 py-2 text-left uppercase">
                   <GlobeIconSvg className="h-10 w-10" />
                   Schools
                 </div>
-                <div className="flex items-center gap-4 px-5 py-2 text-left uppercase hover:bg-gray-100">
+                <div className="flex items-center gap-4 px-5 py-2 text-left uppercase">
                   <PodcastIconSvg className="h-10 w-10" />
                   Podcast
                 </div>
@@ -110,9 +110,7 @@ export const LeftBar = ({ selectedTab }: { selectedTab: Tab | null }) => {
                 >
                   Settings
                 </Link>
-                <div className="px-5 py-2 text-left uppercase hover:bg-gray-100">
-                  Help
-                </div>
+                <div className="px-5 py-2 text-left uppercase">Help</div>
                 {!loggedIn && (
                   <button
                     className="px-5 py-2 text-left uppercase hover:bg-gray-100"
