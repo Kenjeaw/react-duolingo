@@ -13,8 +13,13 @@ import { useRouter } from "next/router";
 
 export const FacebookLogoSvg = (props: ComponentProps<"svg">) => {
   return (
-    <svg width="12" height="22" viewBox="0 0 12 22" {...props}>
-      <title>Fill 4</title>
+    <svg
+      width="12"
+      height="22"
+      viewBox="0 0 12 22"
+      aria-hidden={true}
+      {...props}
+    >
       <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
         <g fill="#3C5A99">
           <g>
@@ -139,7 +144,7 @@ const LoginScreen = ({
       className={[
         "fixed inset-0 z-30 flex flex-col bg-white p-7 transition-[opacity,visibility] duration-300",
         loginScreenState === "HIDDEN"
-          ? "invisible pointer-events-none opacity-0"
+          ? "pointer-events-none invisible opacity-0"
           : "visible opacity-100",
       ].join(" ")}
       aria-hidden={loginScreenState === "HIDDEN"}
@@ -188,8 +193,8 @@ const LoginScreen = ({
                       {ageTooltipShown && (
                         <div className="absolute -right-5 top-full z-10 w-72 rounded-2xl border-2 border-gray-200 bg-white p-4 text-center text-xs leading-5 text-gray-800">
                           Providing your age ensures you get the right Duolingo
-                          experience. For more details, please visit our
-                          Privacy Policy.
+                          experience. For more details, please visit our Privacy
+                          Policy.
                         </div>
                       )}
                     </button>

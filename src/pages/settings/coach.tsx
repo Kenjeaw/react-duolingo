@@ -9,8 +9,13 @@ import { SettingsRightNav } from "~/components/SettingsRightNav";
 
 const CoachSvg = (props: ComponentProps<"svg">) => {
   return (
-    <svg width="124" height="124" viewBox="0 0 124 124" {...props}>
-      <title>owl-coach</title>
+    <svg
+      width="124"
+      height="124"
+      viewBox="0 0 124 124"
+      aria-hidden={true}
+      {...props}
+    >
       <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
         <g transform="translate(7 7)">
           <path

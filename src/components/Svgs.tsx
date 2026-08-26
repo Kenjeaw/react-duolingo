@@ -2493,8 +2493,13 @@ export const GemSvg = () => {
 
 export const LingotsTreasureChestSvg = (props: ComponentProps<"svg">) => {
   return (
-    <svg width="124" height="124" viewBox="0 0 124 124" {...props}>
-      <title>lingot_chest</title>
+    <svg
+      width="124"
+      height="124"
+      viewBox="0 0 124 124"
+      aria-hidden={true}
+      {...props}
+    >
       <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
         <g transform="translate(12 16)">
           <rect
@@ -2711,9 +2716,13 @@ export const DoneSvg = (props: ComponentProps<"svg">) => {
 
 export const AppleSvg = () => {
   return (
-    <svg width="212px" height="212px" viewBox="0 0 212 212" className="w-full">
-      <title>apple</title>
-      <desc>Created with Sketch.</desc>
+    <svg
+      width="212px"
+      height="212px"
+      viewBox="0 0 212 212"
+      className="w-full"
+      aria-hidden={true}
+    >
       <g
         id="apple"
         stroke="none"
@@ -2778,8 +2787,13 @@ export const AppleSvg = () => {
 
 export const LeaderboardBannerSvg = (props: ComponentProps<"svg">) => {
   return (
-    <svg width="267" height="169" viewBox="0 0 267 169" {...props}>
-      <title>Locked Tab NEW</title>
+    <svg
+      width="267"
+      height="169"
+      viewBox="0 0 267 169"
+      aria-hidden={true}
+      {...props}
+    >
       <g fill="none" fillRule="nonzero">
         <path
           d="M7.315 72.39L51.1 47.11c6.801-3.927 15.498-1.596 19.425 5.205l19.22 33.29c10.035 17.381 4.08 39.606-13.301 49.641l-5.474 3.16c-17.38 10.035-39.606 4.08-49.641-13.301L2.11 91.815C-1.817 85.014.514 76.317 7.315 72.39z"
@@ -3318,8 +3332,7 @@ export const LeaderboardExplanationSvg = () => {
 
 export const LockedLeagueSvg = () => {
   return (
-    <svg width="53" height="59" viewBox="0 0 53 59">
-      <title>Locked</title>
+    <svg width="53" height="59" viewBox="0 0 53 59" aria-hidden={true}>
       <g fill="none" fillRule="evenodd">
         <g fillRule="nonzero">
           <path
@@ -3346,8 +3359,13 @@ export const LockedLeagueSvg = () => {
 
 export const BronzeLeagueSvg = (props: ComponentProps<"svg">) => {
   return (
-    <svg width="53" height="59" viewBox="0 0 53 59" {...props}>
-      <title>Bronze</title>
+    <svg
+      width="53"
+      height="59"
+      viewBox="0 0 53 59"
+      aria-hidden={true}
+      {...props}
+    >
       <g fill="none">
         <path
           d="M9.021 3.404H43.98c4.98 0 9.02 4.064 9.02 9.076v21.557C53 47.824 41.893 59 28.191 59H24.81C11.107 59 0 47.824 0 34.038V12.481c0-5.013 4.039-9.077 9.021-9.077z"

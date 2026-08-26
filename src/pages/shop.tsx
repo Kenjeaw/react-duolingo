@@ -87,8 +87,13 @@ const EmptyGemSvg = (props: ComponentProps<"svg">) => {
 
 const DoubleOrNothingSvg = (props: ComponentProps<"svg">) => {
   return (
-    <svg width="124" height="124" viewBox="0 0 124 124" {...props}>
-      <title>double_or_nothing</title>
+    <svg
+      width="124"
+      height="124"
+      viewBox="0 0 124 124"
+      aria-hidden={true}
+      {...props}
+    >
       <defs>
         <rect id="a" x="0" y="0" width="70" height="64" rx="4" />
       </defs>

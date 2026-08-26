@@ -8,8 +8,13 @@ import { onEnterOrSpace } from "~/utils/keyboard";
 
 const MenuIconSvg = (props: ComponentProps<"svg">) => {
   return (
-    <svg width="40" height="40" viewBox="0 0 40 40" {...props}>
-      <title>Artboard</title>
+    <svg
+      width="40"
+      height="40"
+      viewBox="0 0 40 40"
+      aria-hidden={true}
+      {...props}
+    >
       <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
         <g transform="translate(5 10)" fill="#FFF" fillRule="nonzero">
           <rect x="0" y="16" width="30" height="4" rx="2" />
