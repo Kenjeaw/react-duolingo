@@ -175,14 +175,14 @@ const LoginScreen = ({
                     placeholder="Age (optional)"
                   />
                   <div className="absolute bottom-0 right-0 top-0 flex items-center justify-center pr-4">
-                    <div
+                    <button
+                      type="button"
                       className="relative flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border-2 border-gray-200 text-gray-400"
                       onMouseEnter={() => setAgeTooltipShown(true)}
                       onMouseLeave={() => setAgeTooltipShown(false)}
                       onClick={() => setAgeTooltipShown((x) => !x)}
-                      role="button"
-                      tabIndex={0}
                       aria-label="Why do you need an age?"
+                      aria-expanded={ageTooltipShown}
                     >
                       ?
                       {ageTooltipShown && (
@@ -192,7 +192,7 @@ const LoginScreen = ({
                           <span className="text-blue-700">Privacy Policy</span>
                         </div>
                       )}
-                    </div>
+                    </button>
                   </div>
                 </div>
                 <input

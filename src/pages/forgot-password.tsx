@@ -4,6 +4,7 @@ import type { ComponentProps } from "react";
 import React, { useState } from "react";
 import { LanguageDropDown } from "~/components/LanguageDropDown";
 import { useSetLoginScreenState } from "~/components/LoginScreen";
+import { onEnterOrSpace } from "~/utils/keyboard";
 
 const MenuIconSvg = (props: ComponentProps<"svg">) => {
   return (
@@ -48,8 +49,11 @@ const ForgotPassword: NextPage = () => {
           <div
             className="relative flex md:hidden"
             onClick={() => setMobileMenuShown((x) => !x)}
+            onKeyDown={onEnterOrSpace(() => setMobileMenuShown((x) => !x))}
             role="button"
             tabIndex={0}
+            aria-label="Toggle menu"
+            aria-expanded={mobileMenuShown}
           >
             <MenuIconSvg aria-hidden="true" />
             {mobileMenuShown && (

@@ -406,7 +406,8 @@ const UnitSection = ({ unit }: { unit: Unit }): JSX.Element => {
                     );
                   case "treasure":
                     return (
-                      <div
+                      <button
+                        type="button"
                         className={[
                           "relative -mb-4",
                           getTileLeftClassName({
@@ -416,21 +417,18 @@ const UnitSection = ({ unit }: { unit: Unit }): JSX.Element => {
                           }),
                         ].join(" ")}
                         onClick={() => {
-                          if (status === "ACTIVE") {
-                            increaseLessonsCompleted(4);
-                            increaseLingots(1);
-                          }
+                          increaseLessonsCompleted(4);
+                          increaseLingots(1);
                         }}
-                        role="button"
-                        tabIndex={status === "ACTIVE" ? 0 : undefined}
+                        disabled={status !== "ACTIVE"}
                         aria-hidden={status !== "ACTIVE"}
-                        aria-label={status === "ACTIVE" ? "Collect reward" : ""}
+                        aria-label="Collect reward"
                       >
                         {status === "ACTIVE" && (
                           <HoverLabel text="Open" textColor="text-yellow-400" />
                         )}
                         <TileIcon tileType={tile.type} status={status} />
-                      </div>
+                      </button>
                     );
                 }
               })()}

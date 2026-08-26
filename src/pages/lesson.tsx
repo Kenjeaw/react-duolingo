@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   AppleSvg,
   BigCloseSvg,
@@ -289,6 +289,15 @@ const QuitMessage = ({
   quitMessageShown: boolean;
   setQuitMessageShown: (isShown: boolean) => void;
 }) => {
+  useEffect(() => {
+    if (!quitMessageShown) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setQuitMessageShown(false);
+    };
+    document.addEventListener("keydown", closeOnEscape);
+    return () => document.removeEventListener("keydown", closeOnEscape);
+  }, [quitMessageShown, setQuitMessageShown]);
+
   return (
     <>
       <div
@@ -298,8 +307,7 @@ const QuitMessage = ({
             : "pointer-events-none fixed bottom-0 left-0 right-0 top-0 z-30 bg-black bg-opacity-0 transition-all duration-300"
         }
         onClick={() => setQuitMessageShown(false)}
-        aria-label="Close quit message"
-        role="button"
+        aria-hidden={true}
       ></div>
 
       <article

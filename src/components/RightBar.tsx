@@ -17,6 +17,7 @@ import { useBoundStore } from "~/hooks/useBoundStore";
 import { Flag } from "./Flag";
 import { useSetLoginScreenState } from "./LoginScreen";
 import { useLeaderboardRank } from "~/hooks/useLeaderboard";
+import { onEnterOrSpace } from "~/utils/keyboard";
 
 export const RightBar = () => {
   const loggedIn = useBoundStore((x) => x.loggedIn);
@@ -41,6 +42,7 @@ export const RightBar = () => {
             onMouseEnter={() => setLanguagesShown(true)}
             onMouseLeave={() => setLanguagesShown(false)}
             onClick={() => setLanguagesShown((x) => !x)}
+            onKeyDown={onEnterOrSpace(() => setLanguagesShown((x) => !x))}
             role="button"
             tabIndex={0}
           >
@@ -84,6 +86,10 @@ export const RightBar = () => {
               setStreakShown((x) => !x);
               setNow(dayjs());
             }}
+            onKeyDown={onEnterOrSpace(() => {
+              setStreakShown((x) => !x);
+              setNow(dayjs());
+            })}
             role="button"
             tabIndex={0}
           >
@@ -113,6 +119,7 @@ export const RightBar = () => {
             onMouseEnter={() => setGemsShown(true)}
             onMouseLeave={() => setGemsShown(false)}
             onClick={() => setGemsShown((x) => !x)}
+            onKeyDown={onEnterOrSpace(() => setGemsShown((x) => !x))}
             role="button"
             tabIndex={0}
           >

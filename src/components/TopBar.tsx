@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import Link from "next/link";
 import type { ComponentProps } from "react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useBoundStore } from "~/hooks/useBoundStore";
 import { Calendar } from "./Calendar";
 import { Flag } from "./Flag";
@@ -76,6 +76,16 @@ export const TopBar = ({
   const streak = useBoundStore((x) => x.streak);
   const lingots = useBoundStore((x) => x.lingots);
   const language = useBoundStore((x) => x.language);
+
+  useEffect(() => {
+    if (menu === "HIDDEN") return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMenu("HIDDEN");
+    };
+    document.addEventListener("keydown", closeOnEscape);
+    return () => document.removeEventListener("keydown", closeOnEscape);
+  }, [menu]);
+
   return (
     <header className="fixed z-20 h-[58px] w-full">
       <div
@@ -112,12 +122,12 @@ export const TopBar = ({
             {lingots}
           </span>
         </button>
-        <MoreOptionsSvg
+        <button
           onClick={() => setMenu((x) => (x === "MORE" ? "HIDDEN" : "MORE"))}
-          role="button"
-          tabIndex={0}
           aria-label="Toggle more menu"
-        />
+        >
+          <MoreOptionsSvg aria-hidden={true} />
+        </button>
 
         <div
           className={[
@@ -206,8 +216,7 @@ export const TopBar = ({
               menu === "HIDDEN" ? "pointer-events-none" : "",
             ].join(" ")}
             onClick={() => setMenu("HIDDEN")}
-            aria-label="Hide menu"
-            role="button"
+            aria-hidden={true}
           ></div>
         </div>
       </div>

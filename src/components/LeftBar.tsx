@@ -6,6 +6,7 @@ import { useBottomBarItems } from "./BottomBar";
 import { useSetLoginScreenState } from "./LoginScreen";
 import { GlobeIconSvg, PodcastIconSvg } from "./Svgs";
 import { useBoundStore } from "~/hooks/useBoundStore";
+import { onEnterOrSpace } from "~/utils/keyboard";
 
 const LeftBarMoreMenuSvg = (props: ComponentProps<"svg">) => {
   return (
@@ -72,6 +73,7 @@ export const LeftBar = ({ selectedTab }: { selectedTab: Tab | null }) => {
             onClick={() => setMoreMenuShown((x) => !x)}
             onMouseEnter={() => setMoreMenuShown(true)}
             onMouseLeave={() => setMoreMenuShown(false)}
+            onKeyDown={onEnterOrSpace(() => setMoreMenuShown((x) => !x))}
             role="button"
             tabIndex={0}
           >
