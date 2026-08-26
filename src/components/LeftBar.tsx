@@ -86,24 +86,14 @@ export const LeftBar = ({ selectedTab }: { selectedTab: Tab | null }) => {
               ].join(" ")}
             >
               <div className="flex flex-col py-2">
-                <Link
-                  className="flex items-center gap-4 px-5 py-2 text-left uppercase hover:bg-gray-100"
-                  href="https://schools.duolingo.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <div className="flex items-center gap-4 px-5 py-2 text-left uppercase hover:bg-gray-100">
                   <GlobeIconSvg className="h-10 w-10" />
                   Schools
-                </Link>
-                <Link
-                  className="flex items-center gap-4 px-5 py-2 text-left uppercase hover:bg-gray-100"
-                  href="https://podcast.duolingo.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                </div>
+                <div className="flex items-center gap-4 px-5 py-2 text-left uppercase hover:bg-gray-100">
                   <PodcastIconSvg className="h-10 w-10" />
                   Podcast
-                </Link>
+                </div>
               </div>
               <div className="flex flex-col border-t-2 border-gray-300 py-2">
                 {!loggedIn && (
@@ -120,12 +110,9 @@ export const LeftBar = ({ selectedTab }: { selectedTab: Tab | null }) => {
                 >
                   Settings
                 </Link>
-                <Link
-                  className="px-5 py-2 text-left uppercase hover:bg-gray-100"
-                  href="https://support.duolingo.com/hc/en-us"
-                >
+                <div className="px-5 py-2 text-left uppercase hover:bg-gray-100">
                   Help
-                </Link>
+                </div>
                 {!loggedIn && (
                   <button
                     className="px-5 py-2 text-left uppercase hover:bg-gray-100"
