@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import React, { useState } from "react";
 import { BottomBar } from "~/components/BottomBar";
+import { Button } from "~/components/Button";
 import { LeftBar } from "~/components/LeftBar";
 import { TopBar } from "~/components/TopBar";
 import { SettingsRightNav } from "~/components/SettingsRightNav";
@@ -30,8 +31,7 @@ const Account: NextPage = () => {
           <h1 className="text-lg font-bold text-gray-800 sm:text-2xl">
             Account
           </h1>
-          <button
-            className="rounded-2xl border-b-4 border-green-600 bg-green-500 px-5 py-3 font-bold uppercase text-white transition hover:brightness-110 disabled:border-b-0 disabled:bg-gray-200 disabled:text-gray-400 disabled:hover:brightness-100"
+          <Button
             onClick={() => {
               setName(localName);
               setUsername(localUsername);
@@ -39,7 +39,7 @@ const Account: NextPage = () => {
             disabled={name === localName && username === localUsername}
           >
             Save changes
-          </button>
+          </Button>
         </div>
         <div className="flex justify-center gap-12">
           <div className="flex w-full max-w-xl flex-col gap-8">

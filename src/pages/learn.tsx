@@ -185,7 +185,7 @@ const getTileColors = ({
   switch (status) {
     case "LOCKED":
       if (tileType === "fast-forward") return defaultColors;
-      return "border-[#b7b7b7] bg-[#e5e5e5]";
+      return "border-locked-border bg-locked";
     case "COMPLETE":
       return "border-yellow-500 bg-yellow-400";
     case "ACTIVE":
@@ -471,8 +471,8 @@ const getTopBarColors = (
   borderColor: `border-${string}`;
 } => {
   const defaultColors = {
-    backgroundColor: "bg-[#58cc02]",
-    borderColor: "border-[#46a302]",
+    backgroundColor: "bg-brand",
+    borderColor: "border-brand-dark",
   } as const;
 
   if (scrollY < 680) {

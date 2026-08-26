@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import { BottomBar } from "~/components/BottomBar";
 import { LeftBar } from "~/components/LeftBar";
+import { ButtonLink } from "~/components/Button";
 import {
   BronzeLeagueSvg,
   EditPencilSvg,
@@ -92,13 +93,14 @@ const ProfileTopSection = () => {
 
         <Flag language={language} width={40} />
       </div>
-      <Link
+      <ButtonLink
+        variant="info"
+        className="hidden items-center gap-2 self-start md:flex"
         href="/settings/account"
-        className="hidden items-center gap-2 self-start rounded-2xl border-b-4 border-blue-500 bg-blue-400 px-5 py-3 font-bold uppercase text-white transition hover:brightness-110 md:flex"
       >
         <EditPencilSvg />
         Edit profile
-      </Link>
+      </ButtonLink>
     </section>
   );
 };

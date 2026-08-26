@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
-import Link from "next/link";
 import { GlobeSvg } from "~/components/Svgs";
+import { ButtonLink } from "~/components/Button";
 import React from "react";
 import { LanguageHeader } from "~/components/LanguageHeader";
 import { useSetLoginScreenState } from "~/components/LoginScreen";
@@ -14,7 +14,7 @@ const Home: NextPage = () => {
   const setLoginScreenState = useSetLoginScreenState();
   return (
     <main
-      className="flex min-h-screen flex-col items-center justify-center bg-[#235390] text-white"
+      className="flex min-h-screen flex-col items-center justify-center bg-marketing text-white"
       style={{ backgroundImage: `url(${bgSnow.src})` }}
     >
       <LanguageHeader />
@@ -25,14 +25,21 @@ const Home: NextPage = () => {
             The free, fun, and effective way to learn a language!
           </h1>
           <div className="mx-auto mt-4 flex w-fit flex-col items-center gap-3">
-            <Link
+            {/*
+              Bespoke padding: this column is `w-fit`, so below `md` the button's
+              intrinsic width sets the column width. Keep px-10 or the CTA and the
+              button under it stop lining up.
+            */}
+            <ButtonLink
+              variant="primaryDeep"
+              size="none"
+              className="w-full px-10 py-3 text-center md:min-w-[320px]"
               href="/register"
-              className="w-full rounded-2xl border-b-4 border-green-700 bg-green-600 px-10 py-3 text-center font-bold uppercase transition hover:border-green-600 hover:bg-green-500 md:min-w-[320px]"
             >
               Get started
-            </Link>
+            </ButtonLink>
             <button
-              className="w-full rounded-2xl border-2 border-b-4 border-[#042c60] bg-[#235390] px-8 py-3 font-bold uppercase transition hover:bg-[#204b82] md:min-w-[320px]"
+              className="w-full rounded-2xl border-2 border-b-4 border-marketing-border bg-marketing px-8 py-3 font-bold uppercase transition hover:bg-marketing-hover md:min-w-[320px]"
               onClick={() => setLoginScreenState("LOGIN")}
             >
               I already have an account

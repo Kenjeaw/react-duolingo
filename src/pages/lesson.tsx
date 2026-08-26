@@ -18,6 +18,7 @@ import {
 import womanPng from "../../public/woman.png";
 import { useBoundStore } from "~/hooks/useBoundStore";
 import { useRouter } from "next/router";
+import { Button, ButtonLink } from "~/components/Button";
 
 const lessonProblem1 = {
   type: "SELECT_1_OF_3",
@@ -327,12 +328,9 @@ const QuitMessage = ({
           </p>
         </div>
         <div className="flex grow flex-col items-center justify-center gap-4 sm:flex-row-reverse">
-          <Link
-            className="flex w-full items-center justify-center rounded-2xl border-b-4 border-blue-500 bg-blue-400 py-3 font-bold uppercase text-white transition hover:brightness-105 sm:w-48"
-            href="/learn"
-          >
+          <ButtonLink variant="info" fullWidth className="sm:w-48" href="/learn">
             Quit
-          </Link>
+          </ButtonLink>
           <button
             className="w-full rounded-2xl py-3 font-bold uppercase text-blue-400 transition hover:brightness-90 sm:w-48 sm:border-2 sm:border-b-4 sm:border-gray-300 sm:text-gray-400 sm:hover:bg-gray-100"
             onClick={() => setQuitMessageShown(false)}
@@ -366,27 +364,22 @@ const CheckAnswer = ({
     <>
       <section className="border-gray-200 sm:border-t-2 sm:p-10">
         <div className="mx-auto flex max-w-5xl sm:justify-between">
-          <button
-            className="hidden rounded-2xl border-2 border-b-4 border-gray-200 bg-white p-3 font-bold uppercase text-gray-400 transition hover:border-gray-300 hover:bg-gray-200 sm:block sm:min-w-[150px] sm:max-w-fit"
+          <Button
+            variant="secondary"
+            size="block"
+            className="hidden sm:block sm:min-w-[150px] sm:max-w-fit"
             onClick={onSkip}
           >
             Skip
-          </button>
-          {!isAnswerSelected ? (
-            <button
-              className="grow rounded-2xl bg-gray-200 p-3 font-bold uppercase text-gray-400 sm:min-w-[150px] sm:max-w-fit sm:grow-0"
-              disabled
-            >
-              Check
-            </button>
-          ) : (
-            <button
-              onClick={onCheckAnswer}
-              className="grow rounded-2xl border-b-4 border-green-600 bg-green-500 p-3 font-bold uppercase text-white sm:min-w-[150px] sm:max-w-fit sm:grow-0"
-            >
-              Check
-            </button>
-          )}
+          </Button>
+          <Button
+            size="block"
+            className="grow sm:min-w-[150px] sm:max-w-fit sm:grow-0"
+            disabled={!isAnswerSelected}
+            onClick={onCheckAnswer}
+          >
+            Check
+          </Button>
         </div>
       </section>
 
@@ -420,16 +413,14 @@ const CheckAnswer = ({
               </div>
             )}
           </>
-          <button
+          <Button
             onClick={onFinish}
-            className={
-              isAnswerCorrect
-                ? "w-full rounded-2xl border-b-4 border-green-600 bg-green-500 p-3 font-bold uppercase text-white transition hover:brightness-105 sm:min-w-[150px] sm:max-w-fit"
-                : "w-full rounded-2xl border-b-4 border-red-600 bg-red-500 p-3 font-bold uppercase text-white transition hover:brightness-105 sm:min-w-[150px] sm:max-w-fit"
-            }
+            variant={isAnswerCorrect ? "primary" : "danger"}
+            size="block"
+            className="w-full sm:min-w-[150px] sm:max-w-fit"
           >
             Continue
-          </button>
+          </Button>
         </div>
       </div>
     </>
@@ -713,16 +704,19 @@ const LessonComplete = ({
       </div>
       <section className="border-gray-200 sm:border-t-2 sm:p-10">
         <div className="mx-auto flex max-w-5xl sm:justify-between">
-          <button
-            className="hidden rounded-2xl border-2 border-b-4 border-gray-200 bg-white p-3 font-bold uppercase text-gray-400 transition hover:border-gray-300 hover:bg-gray-200 sm:block sm:min-w-[150px] sm:max-w-fit"
+          <Button
+            variant="secondary"
+            size="block"
+            className="hidden sm:block sm:min-w-[150px] sm:max-w-fit"
             onClick={() => setReviewLessonShown(true)}
           >
             Review lesson
-          </button>
-          <Link
-            className={
-              "flex w-full items-center justify-center rounded-2xl border-b-4 border-green-600 bg-green-500 p-3 font-bold uppercase text-white transition hover:brightness-105 sm:min-w-[150px] sm:max-w-fit"
-            }
+          </Button>
+          <ButtonLink
+            variant="primary"
+            size="block"
+            fullWidth
+            className="sm:min-w-[150px] sm:max-w-fit"
             href="/learn"
             onClick={() => {
               increaseXp(correctAnswerCount);
@@ -734,7 +728,7 @@ const LessonComplete = ({
             }}
           >
             Continue
-          </Link>
+          </ButtonLink>
         </div>
       </section>
       <ReviewLesson
@@ -876,12 +870,14 @@ const LessonFastForwardStart = ({
           >
             Maybe later
           </Link>
-          <button
-            className="w-full rounded-2xl border-b-4 border-blue-500 bg-blue-400 p-3 font-bold uppercase text-white transition hover:brightness-110 sm:min-w-[150px] sm:max-w-fit"
+          <Button
+            variant="info"
+            size="block"
+            className="w-full sm:min-w-[150px] sm:max-w-fit"
             onClick={() => setIsStartingLesson(false)}
           >
             {`Let's go`}
-          </button>
+          </Button>
         </div>
       </section>
     </div>
@@ -912,18 +908,23 @@ const LessonFastForwardEndFail = ({
       </div>
       <section className="border-gray-200 sm:border-t-2 sm:p-10">
         <div className="mx-auto flex max-w-5xl sm:justify-between">
-          <button
-            className="hidden rounded-2xl border-2 border-b-4 border-gray-200 bg-white p-3 font-bold uppercase text-gray-400 transition hover:border-gray-300 hover:bg-gray-200 sm:block sm:min-w-[150px] sm:max-w-fit"
+          <Button
+            variant="secondary"
+            size="block"
+            className="hidden sm:block sm:min-w-[150px] sm:max-w-fit"
             onClick={() => setReviewLessonShown(true)}
           >
             Review lesson
-          </button>
-          <Link
-            className="flex w-full items-center justify-center rounded-2xl border-b-4 border-green-600 bg-green-500 p-3 font-bold uppercase text-white transition hover:brightness-105 sm:min-w-[150px] sm:max-w-fit"
+          </Button>
+          <ButtonLink
+            variant="primary"
+            size="block"
+            fullWidth
+            className="sm:min-w-[150px] sm:max-w-fit"
             href="/learn"
           >
             Continue
-          </Link>
+          </ButtonLink>
         </div>
       </section>
       <ReviewLesson
@@ -958,19 +959,24 @@ const LessonFastForwardEndPass = ({
       </div>
       <section className="border-gray-200 sm:border-t-2 sm:p-10">
         <div className="mx-auto flex max-w-5xl sm:justify-between">
-          <button
-            className="hidden rounded-2xl border-2 border-b-4 border-gray-200 bg-white p-3 font-bold uppercase text-gray-400 transition hover:border-gray-300 hover:bg-gray-200 sm:block sm:min-w-[150px] sm:max-w-fit"
+          <Button
+            variant="secondary"
+            size="block"
+            className="hidden sm:block sm:min-w-[150px] sm:max-w-fit"
             onClick={() => setReviewLessonShown(true)}
           >
             Review lesson
-          </button>
-          <Link
-            className="flex w-full items-center justify-center rounded-2xl border-b-4 border-green-600 bg-green-500 p-3 font-bold uppercase text-white transition hover:brightness-105 sm:min-w-[150px] sm:max-w-fit"
+          </Button>
+          <ButtonLink
+            variant="primary"
+            size="block"
+            fullWidth
+            className="sm:min-w-[150px] sm:max-w-fit"
             href="/learn"
             onClick={() => jumpToUnit(unitNumber)}
           >
             Continue
-          </Link>
+          </ButtonLink>
         </div>
       </section>
       <ReviewLesson

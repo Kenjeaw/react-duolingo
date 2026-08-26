@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import Link from "next/link";
 import type { ComponentProps } from "react";
+import { Button } from "~/components/Button";
 import React, { useState } from "react";
 import { LanguageDropDown } from "~/components/LanguageDropDown";
 import { useSetLoginScreenState } from "~/components/LoginScreen";
@@ -96,9 +97,9 @@ const ForgotPassword: NextPage = () => {
             placeholder="Email"
             aria-label="Email"
           />
-          <button className="w-full rounded-2xl border-b-4 border-blue-500 bg-blue-400 py-3 font-bold uppercase text-white transition hover:brightness-110">
+          <Button variant="info" className="w-full">
             Submit
-          </button>
+          </Button>
         </div>
       </div>
     </div>

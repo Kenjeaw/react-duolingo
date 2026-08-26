@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CloseSvg } from "./Svgs";
+import { Button } from "./Button";
 import type { ComponentProps } from "react";
 import React, {
   createContext,
@@ -162,14 +163,16 @@ const LoginScreen = ({
           <CloseSvg />
           <span className="sr-only">Close</span>
         </button>
-        <button
-          className="hidden rounded-2xl border-2 border-b-4 border-gray-200 px-4 py-3 text-sm font-bold uppercase text-blue-400 transition hover:bg-gray-50 hover:brightness-90 sm:block"
+        <Button
+          variant="secondaryAccent"
+          size="none"
+          className="hidden px-4 py-3 text-sm sm:block"
           onClick={() =>
             setLoginScreenState((x) => (x === "LOGIN" ? "SIGNUP" : "LOGIN"))
           }
         >
           {loginScreenState === "LOGIN" ? "Sign up" : "Login"}
-        </button>
+        </Button>
       </header>
       <div className="flex grow items-center justify-center">
         <div className="flex w-full flex-col gap-5 sm:w-96">
@@ -238,12 +241,9 @@ const LoginScreen = ({
               )}
             </div>
           </div>
-          <button
-            className="rounded-2xl border-b-4 border-blue-500 bg-blue-400 py-3 font-bold uppercase text-white transition hover:brightness-110"
-            onClick={logInAndSetUserProperties}
-          >
+          <Button variant="info" onClick={logInAndSetUserProperties}>
             {loginScreenState === "LOGIN" ? "Log in" : "Create account"}
-          </button>
+          </Button>
           <div className="flex items-center gap-2">
             <div className="h-[2px] grow bg-gray-300"></div>
             <span className="font-bold uppercase text-gray-400">or</span>

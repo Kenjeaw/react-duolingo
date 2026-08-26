@@ -2,8 +2,8 @@ import type { NextPage } from "next";
 import React, { useEffect } from "react";
 import { LeftBar } from "~/components/LeftBar";
 import { BottomBar } from "~/components/BottomBar";
+import { ButtonLink } from "~/components/Button";
 import { useBoundStore } from "~/hooks/useBoundStore";
-import Link from "next/link";
 import {
   BronzeLeagueSvg,
   FirstPlaceSvg,
@@ -151,12 +151,14 @@ const Leaderboard: NextPage = () => {
                 {lessonsRemainingToUnlockLeaderboard === 1 ? "" : "s"} to start
                 competing
               </p>
-              <Link
+              <ButtonLink
+                variant="secondaryAccent"
+                size="none"
+                className="w-fit px-16 py-2 text-center"
                 href="/lesson?practice"
-                className="w-fit rounded-2xl border-2 border-b-4 border-gray-200 px-16 py-2 text-center font-bold uppercase text-blue-400 transition hover:bg-gray-50 hover:brightness-90"
               >
                 Start a lesson
-              </Link>
+              </ButtonLink>
               <div className="h-5"></div>
               <LockedLeaderboardSvg />
             </>

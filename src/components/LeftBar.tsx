@@ -37,10 +37,10 @@ export const LeftBar = ({ selectedTab }: { selectedTab: Tab | null }) => {
 
   return (
     <>
-      <nav className="fixed bottom-0 left-0 top-0 hidden flex-col gap-5 border-r-2 border-[#e5e5e5] bg-white p-3 md:flex lg:w-64 lg:p-5">
+      <nav className="fixed bottom-0 left-0 top-0 hidden flex-col gap-5 border-r-2 border-divider bg-white p-3 md:flex lg:w-64 lg:p-5">
         <Link
           href="/learn"
-          className="mb-5 ml-5 mt-5 hidden text-3xl font-bold text-[#58cc02] lg:block"
+          className="mb-5 ml-5 mt-5 hidden text-3xl font-bold text-brand lg:block"
         >
           duolingo
         </Link>
@@ -51,7 +51,7 @@ export const LeftBar = ({ selectedTab }: { selectedTab: Tab | null }) => {
                 {item.name === selectedTab ? (
                   <Link
                     href={item.href}
-                    className="flex grow items-center gap-3 rounded-xl border-2 border-[#84d8ff] bg-[#ddf4ff] px-2 py-1 text-sm font-bold uppercase text-blue-400"
+                    className="flex grow items-center gap-3 rounded-xl border-2 border-selected-border bg-selected px-2 py-1 text-sm font-bold uppercase text-blue-400"
                   >
                     {item.icon}{" "}
                     <span className="sr-only lg:not-sr-only">{item.name}</span>
