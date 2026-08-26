@@ -94,6 +94,7 @@ const ForgotPassword: NextPage = () => {
           <input
             className="w-full rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
             placeholder="Email"
+            aria-label="Email"
           />
           <button className="w-full rounded-2xl border-b-4 border-blue-500 bg-blue-400 py-3 font-bold uppercase text-white transition hover:brightness-110">
             Submit

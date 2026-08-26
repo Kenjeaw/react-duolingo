@@ -45,7 +45,7 @@ const Account: NextPage = () => {
           <div className="flex w-full max-w-xl flex-col gap-8">
             {accountOptions.map(({ title, value, setValue }) => {
               return (
-                <div
+                <label
                   key={title}
                   className="flex flex-col items-stretch justify-between gap-2 sm:flex-row sm:items-center sm:justify-center sm:gap-10 sm:pl-10"
                 >
@@ -55,7 +55,7 @@ const Account: NextPage = () => {
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
                   />
-                </div>
+                </label>
               );
             })}
           </div>

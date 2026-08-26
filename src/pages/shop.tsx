@@ -350,6 +350,7 @@ const Shop: NextPage = () => {
       <LeftBar selectedTab="Shop" />
       <div className="flex justify-center gap-3 pt-14 sm:p-6 sm:pt-10 md:ml-24 lg:ml-64 lg:gap-12">
         <div className="px-4 pb-20">
+          <h1 className="sr-only">Shop</h1>
           <div className="py-7">
             <h2 className="mb-5 text-2xl font-bold">Power-ups</h2>
             <div className="flex border-t-2 border-gray-300 py-5">

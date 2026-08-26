@@ -121,6 +121,11 @@ const LoginScreen = ({
 
   const [ageTooltipShown, setAgeTooltipShown] = useState(false);
 
+  const emailLabel =
+    loginScreenState === "LOGIN"
+      ? "Email or username (optional)"
+      : "Email (optional)";
+
   const nameInputRef = useRef<null | HTMLInputElement>(null);
 
   useEffect(() => {
@@ -178,6 +183,7 @@ const LoginScreen = ({
                   <input
                     className="grow rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
                     placeholder="Age (optional)"
+                    aria-label="Age (optional)"
                   />
                   <div className="absolute bottom-0 right-0 top-0 flex items-center justify-center pr-4">
                     <button
@@ -203,22 +209,21 @@ const LoginScreen = ({
                 <input
                   className="grow rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
                   placeholder="Name (optional)"
+                  aria-label="Name (optional)"
                   ref={nameInputRef}
                 />
               </>
             )}
             <input
               className="grow rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
-              placeholder={
-                loginScreenState === "LOGIN"
-                  ? "Email or username (optional)"
-                  : "Email (optional)"
-              }
+              placeholder={emailLabel}
+              aria-label={emailLabel}
             />
             <div className="relative flex grow">
               <input
                 className="grow rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
                 placeholder="Password (optional)"
+                aria-label="Password (optional)"
                 type="password"
               />
               {loginScreenState === "LOGIN" && (

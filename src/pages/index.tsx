@@ -21,9 +21,9 @@ const Home: NextPage = () => {
       <div className="flex w-full flex-col items-center justify-center gap-3 px-4 py-16 md:flex-row md:gap-36">
         <GlobeSvg className="h-fit w-7/12 md:w-[360px]" />
         <div>
-          <p className="mb-6 max-w-[600px] text-center text-3xl font-bold md:mb-12">
+          <h1 className="mb-6 max-w-[600px] text-center text-3xl font-bold md:mb-12">
             The free, fun, and effective way to learn a language!
-          </p>
+          </h1>
           <div className="mx-auto mt-4 flex w-fit flex-col items-center gap-3">
             <Link
               href="/register"

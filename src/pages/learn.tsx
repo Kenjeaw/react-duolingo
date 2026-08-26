@@ -505,6 +505,7 @@ const Learn: NextPage = () => {
 
       <div className="flex justify-center gap-3 pt-14 sm:p-6 sm:pt-10 md:ml-24 lg:ml-64 lg:gap-12">
         <div className="flex max-w-2xl grow flex-col">
+          <h1 className="sr-only">Learn</h1>
           {units.map((unit) => (
             <UnitSection unit={unit} key={unit.unitNumber} />
           ))}

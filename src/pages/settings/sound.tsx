@@ -93,6 +93,7 @@ const Sound: NextPage = () => {
                     <input
                       className="hidden"
                       type="checkbox"
+                      aria-label={title}
                       checked={value}
                       onChange={() => setValue((x) => !x)}
                     />
