@@ -86,11 +86,11 @@ const Lesson: NextPage = () => {
         question: problem.question,
         yourResponse:
           problem.type === "SELECT_1_OF_3"
-            ? problem.answers[selectedAnswer ?? 0]?.name ?? ""
+            ? (problem.answers[selectedAnswer ?? 0]?.name ?? "")
             : tilesToSentence(problem.answerTiles, selectedAnswers),
         correctResponse:
           problem.type === "SELECT_1_OF_3"
-            ? problem.answers[problem.correctAnswer]?.name ?? ""
+            ? (problem.answers[problem.correctAnswer]?.name ?? "")
             : tilesToSentence(problem.answerTiles, problem.correctAnswer),
       },
     ]);
@@ -110,6 +110,23 @@ const Lesson: NextPage = () => {
   };
 
   const unitNumber = Number(router.query["fast-forward"]);
+
+  /**
+   * Everything the lesson chrome needs, bundled so each problem component
+   * takes its own data plus this, rather than a dozen pass-through props.
+   */
+  const flow: LessonFlow = {
+    correctAnswerCount,
+    totalCorrectAnswersNeeded,
+    hearts,
+    quitMessageShown,
+    setQuitMessageShown,
+    correctAnswerShown,
+    isAnswerCorrect,
+    onCheckAnswer,
+    onFinish,
+    onSkip,
+  };
 
   if (hearts !== null && hearts < 0 && !correctAnswerShown) {
     return (
@@ -166,18 +183,9 @@ const Lesson: NextPage = () => {
       return (
         <ProblemSelect1Of3
           problem={problem}
-          correctAnswerCount={correctAnswerCount}
-          totalCorrectAnswersNeeded={totalCorrectAnswersNeeded}
+          flow={flow}
           selectedAnswer={selectedAnswer}
           setSelectedAnswer={setSelectedAnswer}
-          quitMessageShown={quitMessageShown}
-          correctAnswerShown={correctAnswerShown}
-          setQuitMessageShown={setQuitMessageShown}
-          isAnswerCorrect={isAnswerCorrect}
-          onCheckAnswer={onCheckAnswer}
-          onFinish={onFinish}
-          onSkip={onSkip}
-          hearts={hearts}
         />
       );
     }
@@ -186,18 +194,9 @@ const Lesson: NextPage = () => {
       return (
         <ProblemWriteInEnglish
           problem={problem}
-          correctAnswerCount={correctAnswerCount}
-          totalCorrectAnswersNeeded={totalCorrectAnswersNeeded}
+          flow={flow}
           selectedAnswers={selectedAnswers}
           setSelectedAnswers={setSelectedAnswers}
-          quitMessageShown={quitMessageShown}
-          correctAnswerShown={correctAnswerShown}
-          setQuitMessageShown={setQuitMessageShown}
-          isAnswerCorrect={isAnswerCorrect}
-          onCheckAnswer={onCheckAnswer}
-          onFinish={onFinish}
-          onSkip={onSkip}
-          hearts={hearts}
         />
       );
     }
@@ -205,6 +204,85 @@ const Lesson: NextPage = () => {
 };
 
 export default Lesson;
+
+/**
+ * The lesson-wide state and callbacks that every problem screen needs. The
+ * lesson owns all of it; problem components only read it and pass it on.
+ */
+type LessonFlow = {
+  correctAnswerCount: number;
+  totalCorrectAnswersNeeded: number;
+  hearts: number | null;
+  quitMessageShown: boolean;
+  setQuitMessageShown: React.Dispatch<React.SetStateAction<boolean>>;
+  correctAnswerShown: boolean;
+  isAnswerCorrect: boolean;
+  onCheckAnswer: () => void;
+  onFinish: () => void;
+  onSkip: () => void;
+};
+
+/**
+ * The chrome around a single problem: progress bar and hearts at the top, the
+ * check/continue footer and the quit sheet at the bottom. Problem components
+ * supply only the body and the two things the footer cannot derive on its own.
+ */
+const LessonLayout = ({
+  flow,
+  correctAnswer,
+  isAnswerSelected,
+  sectionClassName = "",
+  children,
+}: {
+  flow: LessonFlow;
+  /** The solution to reveal when the answer was wrong. */
+  correctAnswer: string;
+  /** Whether the Check button should be enabled. */
+  isAnswerSelected: boolean;
+  /** Layout-only additions to the body section. */
+  sectionClassName?: string;
+  children: React.ReactNode;
+}) => {
+  return (
+    <div className="flex min-h-screen flex-col gap-5 px-4 py-5 sm:px-0 sm:py-0">
+      <div className="flex grow flex-col items-center gap-5">
+        <div className="w-full max-w-5xl sm:mt-8 sm:px-5">
+          <ProgressBar
+            correctAnswerCount={flow.correctAnswerCount}
+            totalCorrectAnswersNeeded={flow.totalCorrectAnswersNeeded}
+            setQuitMessageShown={flow.setQuitMessageShown}
+            hearts={flow.hearts}
+          />
+        </div>
+        <section
+          className={[
+            "flex max-w-2xl grow flex-col gap-5 self-center sm:items-center sm:justify-center sm:gap-24",
+            sectionClassName,
+          ]
+            .filter(Boolean)
+            .join(" ")}
+        >
+          {children}
+        </section>
+      </div>
+
+      <CheckAnswer
+        correctAnswer={correctAnswer}
+        correctAnswerShown={flow.correctAnswerShown}
+        isAnswerCorrect={flow.isAnswerCorrect}
+        isAnswerSelected={isAnswerSelected}
+        onCheckAnswer={flow.onCheckAnswer}
+        onFinish={flow.onFinish}
+        onSkip={flow.onSkip}
+      />
+
+      <QuitMessage
+        quitMessageShown={flow.quitMessageShown}
+        setQuitMessageShown={flow.setQuitMessageShown}
+      />
+    </div>
+  );
+};
 
 const ProgressBar = ({
   correctAnswerCount,
@@ -243,7 +321,7 @@ const ProgressBar = ({
         <div
           className={
             "h-full rounded-full bg-green-500 transition-all duration-700 " +
-            (correctAnswerCount > 0 ? "px-2 pt-1 " : "")
+            (correctAnswerCount > 0 ? "px-2 pt-1" : "")
           }
           style={{
             width: `${(correctAnswerCount / totalCorrectAnswersNeeded) * 100}%`,
@@ -308,7 +386,12 @@ const QuitMessage = ({
           </p>
         </div>
         <div className="flex grow flex-col items-center justify-center gap-4 sm:flex-row-reverse">
-          <ButtonLink variant="info" fullWidth className="sm:w-48" href="/learn">
+          <ButtonLink
+            variant="info"
+            fullWidth
+            className="sm:w-48"
+            href="/learn"
+          >
             Quit
           </ButtonLink>
           <button
@@ -409,218 +492,181 @@ const CheckAnswer = ({
 
 const ProblemSelect1Of3 = ({
   problem,
-  correctAnswerCount,
-  totalCorrectAnswersNeeded,
+  flow,
   selectedAnswer,
   setSelectedAnswer,
-  quitMessageShown,
-  correctAnswerShown,
-  setQuitMessageShown,
-  isAnswerCorrect,
-  onCheckAnswer,
-  onFinish,
-  onSkip,
-  hearts,
 }: {
   problem: Select1Of3Problem;
-  correctAnswerCount: number;
-  totalCorrectAnswersNeeded: number;
+  flow: LessonFlow;
   selectedAnswer: number | null;
   setSelectedAnswer: React.Dispatch<React.SetStateAction<number | null>>;
-  correctAnswerShown: boolean;
-  quitMessageShown: boolean;
-  setQuitMessageShown: React.Dispatch<React.SetStateAction<boolean>>;
-  isAnswerCorrect: boolean;
-  onCheckAnswer: () => void;
-  onFinish: () => void;
-  onSkip: () => void;
-  hearts: number | null;
 }) => {
   const { question, answers, correctAnswer } = problem;
 
   return (
-    <div className="flex min-h-screen flex-col gap-5 px-4 py-5 sm:px-0 sm:py-0">
-      <div className="flex grow flex-col items-center gap-5">
-        <div className="w-full max-w-5xl sm:mt-8 sm:px-5">
-          <ProgressBar
-            correctAnswerCount={correctAnswerCount}
-            totalCorrectAnswersNeeded={totalCorrectAnswersNeeded}
-            setQuitMessageShown={setQuitMessageShown}
-            hearts={hearts}
-          />
-        </div>
-        <section className="flex max-w-2xl grow flex-col gap-5 self-center sm:items-center sm:justify-center sm:gap-24 sm:px-5">
-          <h1 className="self-start text-2xl font-bold sm:text-3xl">
-            {question}
-          </h1>
-          <div
-            className="grid grid-cols-2 gap-2 sm:grid-cols-3"
-            role="radiogroup"
-          >
-            {answers.map((answer, i) => {
-              return (
-                <div
-                  key={i}
-                  className={
-                    i === selectedAnswer
-                      ? "cursor-pointer rounded-xl border-2 border-b-4 border-blue-300 bg-blue-100 p-4 text-blue-400"
-                      : "cursor-pointer rounded-xl border-2 border-b-4 border-gray-200 p-4 hover:bg-gray-100"
-                  }
-                  role="radio"
-                  aria-checked={i === selectedAnswer}
-                  tabIndex={0}
-                  onClick={() => setSelectedAnswer(i)}
-                >
-                  {answer.icon}
-                  <h2 className="text-center">{answer.name}</h2>
-                </div>
-              );
-            })}
-          </div>
-        </section>
+    <LessonLayout
+      flow={flow}
+      correctAnswer={answers[correctAnswer]?.name ?? ""}
+      isAnswerSelected={selectedAnswer !== null}
+      sectionClassName="sm:px-5"
+    >
+      <h1 className="self-start text-2xl font-bold sm:text-3xl">{question}</h1>
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3" role="radiogroup">
+        {answers.map((answer, i) => {
+          return (
+            <div
+              key={i}
+              className={
+                i === selectedAnswer
+                  ? "cursor-pointer rounded-xl border-2 border-b-4 border-blue-300 bg-blue-100 p-4 text-blue-400"
+                  : "cursor-pointer rounded-xl border-2 border-b-4 border-gray-200 p-4 hover:bg-gray-100"
+              }
+              role="radio"
+              aria-checked={i === selectedAnswer}
+              tabIndex={0}
+              onClick={() => setSelectedAnswer(i)}
+            >
+              {answer.icon}
+              <h2 className="text-center">{answer.name}</h2>
+            </div>
+          );
+        })}
       </div>
-
-      <CheckAnswer
-        correctAnswer={answers[correctAnswer]?.name ?? ""}
-        correctAnswerShown={correctAnswerShown}
-        isAnswerCorrect={isAnswerCorrect}
-        isAnswerSelected={selectedAnswer !== null}
-        onCheckAnswer={onCheckAnswer}
-        onFinish={onFinish}
-        onSkip={onSkip}
-      />
-
-      <QuitMessage
-        quitMessageShown={quitMessageShown}
-        setQuitMessageShown={setQuitMessageShown}
-      />
-    </div>
+    </LessonLayout>
   );
 };
 
 const ProblemWriteInEnglish = ({
   problem,
-  correctAnswerCount,
-  totalCorrectAnswersNeeded,
+  flow,
   selectedAnswers,
   setSelectedAnswers,
-  quitMessageShown,
-  correctAnswerShown,
-  setQuitMessageShown,
-  isAnswerCorrect,
-  onCheckAnswer,
-  onFinish,
-  onSkip,
-  hearts,
 }: {
   problem: WriteInEnglishProblem;
-  correctAnswerCount: number;
-  totalCorrectAnswersNeeded: number;
+  flow: LessonFlow;
   selectedAnswers: number[];
   setSelectedAnswers: React.Dispatch<React.SetStateAction<number[]>>;
-  correctAnswerShown: boolean;
-  quitMessageShown: boolean;
-  setQuitMessageShown: React.Dispatch<React.SetStateAction<boolean>>;
-  isAnswerCorrect: boolean;
-  onCheckAnswer: () => void;
-  onFinish: () => void;
-  onSkip: () => void;
-  hearts: number | null;
 }) => {
   const { question, correctAnswer, answerTiles } = problem;
 
   return (
-    <div className="flex min-h-screen flex-col gap-5 px-4 py-5 sm:px-0 sm:py-0">
-      <div className="flex grow flex-col items-center gap-5">
-        <div className="w-full max-w-5xl sm:mt-8 sm:px-5">
-          <ProgressBar
-            correctAnswerCount={correctAnswerCount}
-            totalCorrectAnswersNeeded={totalCorrectAnswersNeeded}
-            setQuitMessageShown={setQuitMessageShown}
-            hearts={hearts}
-          />
+    <LessonLayout
+      flow={flow}
+      correctAnswer={tilesToSentence(answerTiles, correctAnswer)}
+      isAnswerSelected={selectedAnswers.length > 0}
+    >
+      <h1 className="mb-2 text-2xl font-bold sm:text-3xl">
+        Write this in English
+      </h1>
+
+      <div className="w-full">
+        <div className="flex items-center gap-2 px-2">
+          <Image src={womanPng} alt="" width={92} height={115} />
+          <div className="relative ml-2 w-fit rounded-2xl border-2 border-gray-200 p-4">
+            {question}
+            <div
+              className="absolute h-4 w-4 rotate-45 border-b-2 border-l-2 border-gray-200 bg-white"
+              style={{
+                top: "calc(50% - 8px)",
+                left: "-10px",
+              }}
+            ></div>
+          </div>
         </div>
-        <section className="flex max-w-2xl grow flex-col gap-5 self-center sm:items-center sm:justify-center sm:gap-24">
-          <h1 className="mb-2 text-2xl font-bold sm:text-3xl">
-            Write this in English
-          </h1>
 
-          <div className="w-full">
-            <div className="flex items-center gap-2 px-2">
-              <Image src={womanPng} alt="" width={92} height={115} />
-              <div className="relative ml-2 w-fit rounded-2xl border-2 border-gray-200 p-4">
-                {question}
-                <div
-                  className="absolute h-4 w-4 rotate-45 border-b-2 border-l-2 border-gray-200 bg-white"
-                  style={{
-                    top: "calc(50% - 8px)",
-                    left: "-10px",
-                  }}
-                ></div>
-              </div>
-            </div>
-
-            <div className="flex min-h-[60px] flex-wrap gap-1 border-b-2 border-t-2 border-gray-200 py-1">
-              {selectedAnswers.map((i) => {
-                return (
-                  <button
-                    key={i}
-                    className="rounded-2xl border-2 border-b-4 border-gray-200 p-2 text-gray-700"
-                    onClick={() => {
-                      setSelectedAnswers((selectedAnswers) => {
-                        return selectedAnswers.filter((x) => x !== i);
-                      });
-                    }}
-                  >
-                    {answerTiles[i]}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-          <div className="flex flex-wrap justify-center gap-1">
-            {answerTiles.map((answerTile, i) => {
-              return (
-                <button
-                  key={i}
-                  className={
-                    selectedAnswers.includes(i)
-                      ? "rounded-2xl border-2 border-b-4 border-gray-200 bg-gray-200 p-2 text-gray-200"
-                      : "rounded-2xl border-2 border-b-4 border-gray-200 p-2 text-gray-700"
-                  }
-                  disabled={selectedAnswers.includes(i)}
-                  onClick={() =>
-                    setSelectedAnswers((selectedAnswers) => {
-                      if (selectedAnswers.includes(i)) {
-                        return selectedAnswers;
-                      }
-                      return [...selectedAnswers, i];
-                    })
-                  }
-                >
-                  {answerTile}
-                </button>
-              );
-            })}
-          </div>
-        </section>
+        <div className="flex min-h-[60px] flex-wrap gap-1 border-b-2 border-t-2 border-gray-200 py-1">
+          {selectedAnswers.map((i) => {
+            return (
+              <button
+                key={i}
+                className="rounded-2xl border-2 border-b-4 border-gray-200 p-2 text-gray-700"
+                onClick={() => {
+                  setSelectedAnswers((selectedAnswers) => {
+                    return selectedAnswers.filter((x) => x !== i);
+                  });
+                }}
+              >
+                {answerTiles[i]}
+              </button>
+            );
+          })}
+        </div>
       </div>
+      <div className="flex flex-wrap justify-center gap-1">
+        {answerTiles.map((answerTile, i) => {
+          return (
+            <button
+              key={i}
+              className={
+                selectedAnswers.includes(i)
+                  ? "rounded-2xl border-2 border-b-4 border-gray-200 bg-gray-200 p-2 text-gray-200"
+                  : "rounded-2xl border-2 border-b-4 border-gray-200 p-2 text-gray-700"
+              }
+              disabled={selectedAnswers.includes(i)}
+              onClick={() =>
+                setSelectedAnswers((selectedAnswers) => {
+                  if (selectedAnswers.includes(i)) {
+                    return selectedAnswers;
+                  }
+                  return [...selectedAnswers, i];
+                })
+              }
+            >
+              {answerTile}
+            </button>
+          );
+        })}
+      </div>
+    </LessonLayout>
+  );
+};
 
-      <CheckAnswer
-        correctAnswer={tilesToSentence(answerTiles, correctAnswer)}
-        correctAnswerShown={correctAnswerShown}
-        isAnswerCorrect={isAnswerCorrect}
-        isAnswerSelected={selectedAnswers.length > 0}
-        onCheckAnswer={onCheckAnswer}
-        onFinish={onFinish}
-        onSkip={onSkip}
+/**
+ * The footer every lesson end screen shares: review the scorecard, or continue
+ * back to the learn path. `onContinue` is where each screen commits whatever
+ * finishing the lesson earned.
+ */
+const LessonEndFooter = ({
+  reviewLessonShown,
+  setReviewLessonShown,
+  questionResults,
+  onContinue,
+}: {
+  reviewLessonShown: boolean;
+  setReviewLessonShown: React.Dispatch<React.SetStateAction<boolean>>;
+  questionResults: QuestionResult[];
+  onContinue?: () => void;
+}) => {
+  return (
+    <>
+      <section className="border-gray-200 sm:border-t-2 sm:p-10">
+        <div className="mx-auto flex max-w-5xl sm:justify-between">
+          <Button
+            variant="secondary"
+            size="block"
+            className="hidden sm:block sm:min-w-[150px] sm:max-w-fit"
+            onClick={() => setReviewLessonShown(true)}
+          >
+            Review lesson
+          </Button>
+          <ButtonLink
+            variant="primary"
+            size="block"
+            fullWidth
+            className="sm:min-w-[150px] sm:max-w-fit"
+            href="/learn"
+            onClick={onContinue}
+          >
+            Continue
+          </ButtonLink>
+        </div>
+      </section>
+      <ReviewLesson
+        reviewLessonShown={reviewLessonShown}
+        setReviewLessonShown={setReviewLessonShown}
+        questionResults={questionResults}
       />
-
-      <QuitMessage
-        quitMessageShown={quitMessageShown}
-        setQuitMessageShown={setQuitMessageShown}
-      />
-    </div>
+    </>
   );
 };
 
@@ -682,39 +728,18 @@ const LessonComplete = ({
           </div>
         </div>
       </div>
-      <section className="border-gray-200 sm:border-t-2 sm:p-10">
-        <div className="mx-auto flex max-w-5xl sm:justify-between">
-          <Button
-            variant="secondary"
-            size="block"
-            className="hidden sm:block sm:min-w-[150px] sm:max-w-fit"
-            onClick={() => setReviewLessonShown(true)}
-          >
-            Review lesson
-          </Button>
-          <ButtonLink
-            variant="primary"
-            size="block"
-            fullWidth
-            className="sm:min-w-[150px] sm:max-w-fit"
-            href="/learn"
-            onClick={() => {
-              increaseXp(correctAnswerCount);
-              addToday();
-              increaseLingots(isPractice ? 0 : 1);
-              if (!isPractice) {
-                increaseLessonsCompleted();
-              }
-            }}
-          >
-            Continue
-          </ButtonLink>
-        </div>
-      </section>
-      <ReviewLesson
+      <LessonEndFooter
         reviewLessonShown={reviewLessonShown}
         setReviewLessonShown={setReviewLessonShown}
         questionResults={questionResults}
+        onContinue={() => {
+          increaseXp(correctAnswerCount);
+          addToday();
+          increaseLingots(isPractice ? 0 : 1);
+          if (!isPractice) {
+            increaseLessonsCompleted();
+          }
+        }}
       />
     </div>
   );
@@ -886,28 +911,7 @@ const LessonFastForwardEndFail = ({
           {`Don't worry! Practice makes perfect.`}
         </p>
       </div>
-      <section className="border-gray-200 sm:border-t-2 sm:p-10">
-        <div className="mx-auto flex max-w-5xl sm:justify-between">
-          <Button
-            variant="secondary"
-            size="block"
-            className="hidden sm:block sm:min-w-[150px] sm:max-w-fit"
-            onClick={() => setReviewLessonShown(true)}
-          >
-            Review lesson
-          </Button>
-          <ButtonLink
-            variant="primary"
-            size="block"
-            fullWidth
-            className="sm:min-w-[150px] sm:max-w-fit"
-            href="/learn"
-          >
-            Continue
-          </ButtonLink>
-        </div>
-      </section>
-      <ReviewLesson
+      <LessonEndFooter
         reviewLessonShown={reviewLessonShown}
         setReviewLessonShown={setReviewLessonShown}
         questionResults={questionResults}
@@ -937,32 +941,11 @@ const LessonFastForwardEndPass = ({
           Way to go! You’re making great strides!
         </p>
       </div>
-      <section className="border-gray-200 sm:border-t-2 sm:p-10">
-        <div className="mx-auto flex max-w-5xl sm:justify-between">
-          <Button
-            variant="secondary"
-            size="block"
-            className="hidden sm:block sm:min-w-[150px] sm:max-w-fit"
-            onClick={() => setReviewLessonShown(true)}
-          >
-            Review lesson
-          </Button>
-          <ButtonLink
-            variant="primary"
-            size="block"
-            fullWidth
-            className="sm:min-w-[150px] sm:max-w-fit"
-            href="/learn"
-            onClick={() => jumpToUnit(unitNumber)}
-          >
-            Continue
-          </ButtonLink>
-        </div>
-      </section>
-      <ReviewLesson
+      <LessonEndFooter
         reviewLessonShown={reviewLessonShown}
         setReviewLessonShown={setReviewLessonShown}
         questionResults={questionResults}
+        onContinue={() => jumpToUnit(unitNumber)}
       />
     </div>
   );

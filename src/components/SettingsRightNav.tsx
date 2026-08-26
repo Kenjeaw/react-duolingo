@@ -2,7 +2,7 @@ import Link from "next/link";
 import React from "react";
 import { useBoundStore } from "~/hooks/useBoundStore";
 
-type SettingsTitle = ReturnType<typeof useSettingsPages>[number]["title"];
+export type SettingsTitle = ReturnType<typeof useSettingsPages>[number]["title"];
 
 const useSettingsPages = () => {
   const loggedIn = useBoundStore((x) => x.loggedIn);
