@@ -3,9 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import {
-  AppleSvg,
   BigCloseSvg,
-  BoySvg,
   CloseSvg,
   DoneSvg,
   LessonFastForwardEndFailSvg,
@@ -13,32 +11,16 @@ import {
   LessonFastForwardStartSvg,
   LessonTopBarEmptyHeart,
   LessonTopBarHeart,
-  WomanSvg,
 } from "~/components/Svgs";
 import womanPng from "../../public/woman.png";
 import { useBoundStore } from "~/hooks/useBoundStore";
 import { useRouter } from "next/router";
 import { Button, ButtonLink } from "~/components/Button";
-
-const lessonProblem1 = {
-  type: "SELECT_1_OF_3",
-  question: `Which one of these is "the apple"?`,
-  answers: [
-    { icon: <AppleSvg />, name: "la manzana" },
-    { icon: <BoySvg />, name: "el niño" },
-    { icon: <WomanSvg />, name: "la mujer" },
-  ],
-  correctAnswer: 0,
-} as const;
-
-const lessonProblem2 = {
-  type: "WRITE_IN_ENGLISH",
-  question: "El niño",
-  answerTiles: ["woman", "milk", "water", "I", "The", "boy"],
-  correctAnswer: [4, 5],
-} as const;
-
-const lessonProblems = [lessonProblem1, lessonProblem2];
+import type {
+  Select1Of3Problem,
+  WriteInEnglishProblem,
+} from "~/utils/lessonProblems";
+import { lessonProblems, tilesToSentence } from "~/utils/lessonProblems";
 
 const numbersEqual = (a: readonly number[], b: readonly number[]): boolean => {
   return a.length === b.length && a.every((_, i) => a[i] === b[i]);
@@ -75,7 +57,7 @@ const Lesson: NextPage = () => {
   const [questionResults, setQuestionResults] = useState<QuestionResult[]>([]);
   const [reviewLessonShown, setReviewLessonShown] = useState(false);
 
-  const problem = lessonProblems[lessonProblem] ?? lessonProblem1;
+  const problem = lessonProblems[lessonProblem] ?? lessonProblems[0];
 
   const totalCorrectAnswersNeeded = 2;
 
@@ -86,10 +68,10 @@ const Lesson: NextPage = () => {
       ? 3 - incorrectAnswerCount
       : null;
 
-  const { correctAnswer } = problem;
-  const isAnswerCorrect = Array.isArray(correctAnswer)
-    ? numbersEqual(selectedAnswers, correctAnswer)
-    : selectedAnswer === correctAnswer;
+  const isAnswerCorrect =
+    problem.type === "SELECT_1_OF_3"
+      ? selectedAnswer === problem.correctAnswer
+      : numbersEqual(selectedAnswers, problem.correctAnswer);
 
   const onCheckAnswer = () => {
     setCorrectAnswerShown(true);
@@ -105,13 +87,11 @@ const Lesson: NextPage = () => {
         yourResponse:
           problem.type === "SELECT_1_OF_3"
             ? problem.answers[selectedAnswer ?? 0]?.name ?? ""
-            : selectedAnswers.map((i) => problem.answerTiles[i]).join(" "),
+            : tilesToSentence(problem.answerTiles, selectedAnswers),
         correctResponse:
           problem.type === "SELECT_1_OF_3"
-            ? problem.answers[problem.correctAnswer].name
-            : problem.correctAnswer
-                .map((i) => problem.answerTiles[i])
-                .join(" "),
+            ? problem.answers[problem.correctAnswer]?.name ?? ""
+            : tilesToSentence(problem.answerTiles, problem.correctAnswer),
       },
     ]);
   };
@@ -442,7 +422,7 @@ const ProblemSelect1Of3 = ({
   onSkip,
   hearts,
 }: {
-  problem: typeof lessonProblem1;
+  problem: Select1Of3Problem;
   correctAnswerCount: number;
   totalCorrectAnswersNeeded: number;
   selectedAnswer: number | null;
@@ -501,7 +481,7 @@ const ProblemSelect1Of3 = ({
       </div>
 
       <CheckAnswer
-        correctAnswer={answers[correctAnswer].name}
+        correctAnswer={answers[correctAnswer]?.name ?? ""}
         correctAnswerShown={correctAnswerShown}
         isAnswerCorrect={isAnswerCorrect}
         isAnswerSelected={selectedAnswer !== null}
@@ -533,7 +513,7 @@ const ProblemWriteInEnglish = ({
   onSkip,
   hearts,
 }: {
-  problem: typeof lessonProblem2;
+  problem: WriteInEnglishProblem;
   correctAnswerCount: number;
   totalCorrectAnswersNeeded: number;
   selectedAnswers: number[];
@@ -627,7 +607,7 @@ const ProblemWriteInEnglish = ({
       </div>
 
       <CheckAnswer
-        correctAnswer={correctAnswer.map((i) => answerTiles[i]).join(" ")}
+        correctAnswer={tilesToSentence(answerTiles, correctAnswer)}
         correctAnswerShown={correctAnswerShown}
         isAnswerCorrect={isAnswerCorrect}
         isAnswerSelected={selectedAnswers.length > 0}
