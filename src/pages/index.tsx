@@ -3,7 +3,7 @@ import Link from "next/link";
 import { GlobeSvg } from "~/components/Svgs";
 import React from "react";
 import { LanguageHeader } from "~/components/LanguageHeader";
-import { useLoginScreen, LoginScreen } from "~/components/LoginScreen";
+import { useSetLoginScreenState } from "~/components/LoginScreen";
 import _bgSnow from "../../public/bg-snow.svg";
 import type { StaticImageData } from "next/image";
 import { LanguageCarousel } from "~/components/LanguageCarousel";
@@ -11,7 +11,7 @@ import { LanguageCarousel } from "~/components/LanguageCarousel";
 const bgSnow = _bgSnow as StaticImageData;
 
 const Home: NextPage = () => {
-  const { loginScreenState, setLoginScreenState } = useLoginScreen();
+  const setLoginScreenState = useSetLoginScreenState();
   return (
     <main
       className="flex min-h-screen flex-col items-center justify-center bg-[#235390] text-white"
@@ -41,10 +41,6 @@ const Home: NextPage = () => {
         </div>
       </div>
       <LanguageCarousel />
-      <LoginScreen
-        loginScreenState={loginScreenState}
-        setLoginScreenState={setLoginScreenState}
-      />
     </main>
   );
 };

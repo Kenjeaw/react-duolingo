@@ -1,7 +1,13 @@
 import Link from "next/link";
 import { CloseSvg } from "./Svgs";
 import type { ComponentProps } from "react";
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useBoundStore } from "~/hooks/useBoundStore";
 import { useRouter } from "next/router";
 
@@ -50,7 +56,38 @@ export const GoogleLogoSvg = (props: ComponentProps<"svg">) => {
 
 export type LoginScreenState = "HIDDEN" | "LOGIN" | "SIGNUP";
 
-export const useLoginScreen = () => {
+type SetLoginScreenState = React.Dispatch<
+  React.SetStateAction<LoginScreenState>
+>;
+
+const LoginScreenContext = createContext<SetLoginScreenState>(() => undefined);
+
+/** Opens the app's single login screen. */
+export const useSetLoginScreenState = () => useContext(LoginScreenContext);
+
+/**
+ * Renders the one and only login screen. It is a full-screen overlay that stays
+ * mounted, so rendering it per page or per component would stack several copies
+ * of the same form on top of each other.
+ */
+export const LoginScreenProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const { loginScreenState, setLoginScreenState } = useLoginScreen();
+  return (
+    <LoginScreenContext.Provider value={setLoginScreenState}>
+      {children}
+      <LoginScreen
+        loginScreenState={loginScreenState}
+        setLoginScreenState={setLoginScreenState}
+      />
+    </LoginScreenContext.Provider>
+  );
+};
+
+const useLoginScreen = () => {
   const router = useRouter();
   const loggedIn = useBoundStore((x) => x.loggedIn);
   const queryState: LoginScreenState = (() => {
@@ -64,7 +101,7 @@ export const useLoginScreen = () => {
   return { loginScreenState, setLoginScreenState };
 };
 
-export const LoginScreen = ({
+const LoginScreen = ({
   loginScreenState,
   setLoginScreenState,
 }: {
@@ -100,12 +137,12 @@ export const LoginScreen = ({
   return (
     <article
       className={[
-        "fixed inset-0 z-30 flex flex-col bg-white p-7 transition duration-300",
+        "fixed inset-0 z-30 flex flex-col bg-white p-7 transition-[opacity,visibility] duration-300",
         loginScreenState === "HIDDEN"
-          ? "pointer-events-none opacity-0"
-          : "opacity-100",
+          ? "invisible pointer-events-none opacity-0"
+          : "visible opacity-100",
       ].join(" ")}
-      aria-hidden={!loginScreenState}
+      aria-hidden={loginScreenState === "HIDDEN"}
     >
       <header className="flex flex-row-reverse justify-between sm:flex-row">
         <button

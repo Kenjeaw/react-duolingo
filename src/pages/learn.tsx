@@ -31,7 +31,6 @@ import { BottomBar } from "~/components/BottomBar";
 import { RightBar } from "~/components/RightBar";
 import { LeftBar } from "~/components/LeftBar";
 import { useRouter } from "next/router";
-import { LoginScreen, useLoginScreen } from "~/components/LoginScreen";
 import { useBoundStore } from "~/hooks/useBoundStore";
 import type { Tile, TileType, Unit } from "~/utils/units";
 import { units } from "~/utils/units";
@@ -488,8 +487,6 @@ const getTopBarColors = (
 };
 
 const Learn: NextPage = () => {
-  const { loginScreenState, setLoginScreenState } = useLoginScreen();
-
   const [scrollY, setScrollY] = useState(0);
   useEffect(() => {
     const updateScrollY = () => setScrollY(globalThis.scrollY ?? scrollY);
@@ -538,10 +535,6 @@ const Learn: NextPage = () => {
       <div className="pt-[90px]"></div>
 
       <BottomBar selectedTab="Learn" />
-      <LoginScreen
-        loginScreenState={loginScreenState}
-        setLoginScreenState={setLoginScreenState}
-      />
     </>
   );
 };

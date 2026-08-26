@@ -15,8 +15,7 @@ import {
 import { Calendar } from "./Calendar";
 import { useBoundStore } from "~/hooks/useBoundStore";
 import { Flag } from "./Flag";
-import type { LoginScreenState } from "./LoginScreen";
-import { LoginScreen } from "./LoginScreen";
+import { useSetLoginScreenState } from "./LoginScreen";
 import { useLeaderboardRank } from "~/hooks/useLeaderboard";
 
 export const RightBar = () => {
@@ -32,9 +31,6 @@ export const RightBar = () => {
   const [now, setNow] = useState(dayjs());
 
   const [gemsShown, setGemsShown] = useState(false);
-
-  const [loginScreenState, setLoginScreenState] =
-    useState<LoginScreenState>("HIDDEN");
 
   return (
     <>
@@ -154,14 +150,8 @@ export const RightBar = () => {
         ) : null}
         <DailyQuestsSection />
         <XpProgressSection />
-        {!loggedIn && (
-          <CreateAProfileSection setLoginScreenState={setLoginScreenState} />
-        )}
+        {!loggedIn && <CreateAProfileSection />}
       </aside>
-      <LoginScreen
-        loginScreenState={loginScreenState}
-        setLoginScreenState={setLoginScreenState}
-      />
     </>
   );
 };
@@ -619,11 +609,8 @@ const XpProgressSection = () => {
   );
 };
 
-const CreateAProfileSection = ({
-  setLoginScreenState,
-}: {
-  setLoginScreenState: React.Dispatch<React.SetStateAction<LoginScreenState>>;
-}) => {
+const CreateAProfileSection = () => {
+  const setLoginScreenState = useSetLoginScreenState();
   return (
     <article className="flex flex-col gap-5 rounded-2xl border-2 border-gray-200 p-6 font-bold">
       <h2 className="text-xl">Create a profile to save your progress!</h2>

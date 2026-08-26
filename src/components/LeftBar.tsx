@@ -3,8 +3,7 @@ import type { ComponentProps } from "react";
 import React, { useState } from "react";
 import type { Tab } from "./BottomBar";
 import { useBottomBarItems } from "./BottomBar";
-import type { LoginScreenState } from "./LoginScreen";
-import { LoginScreen } from "./LoginScreen";
+import { useSetLoginScreenState } from "./LoginScreen";
 import { GlobeIconSvg, PodcastIconSvg } from "./Svgs";
 import { useBoundStore } from "~/hooks/useBoundStore";
 
@@ -31,8 +30,7 @@ export const LeftBar = ({ selectedTab }: { selectedTab: Tab | null }) => {
   const logOut = useBoundStore((x) => x.logOut);
 
   const [moreMenuShown, setMoreMenuShown] = useState(false);
-  const [loginScreenState, setLoginScreenState] =
-    useState<LoginScreenState>("HIDDEN");
+  const setLoginScreenState = useSetLoginScreenState();
 
   const bottomBarItems = useBottomBarItems();
 
@@ -134,10 +132,6 @@ export const LeftBar = ({ selectedTab }: { selectedTab: Tab | null }) => {
           </div>
         </ul>
       </nav>
-      <LoginScreen
-        loginScreenState={loginScreenState}
-        setLoginScreenState={setLoginScreenState}
-      />
     </>
   );
 };

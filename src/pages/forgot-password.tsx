@@ -3,8 +3,7 @@ import Link from "next/link";
 import type { ComponentProps } from "react";
 import React, { useState } from "react";
 import { LanguageDropDown } from "~/components/LanguageDropDown";
-import type { LoginScreenState } from "~/components/LoginScreen";
-import { LoginScreen } from "~/components/LoginScreen";
+import { useSetLoginScreenState } from "~/components/LoginScreen";
 
 const MenuIconSvg = (props: ComponentProps<"svg">) => {
   return (
@@ -22,8 +21,7 @@ const MenuIconSvg = (props: ComponentProps<"svg">) => {
 };
 
 const ForgotPassword: NextPage = () => {
-  const [loginScreenState, setLoginScreenState] =
-    useState<LoginScreenState>("HIDDEN");
+  const setLoginScreenState = useSetLoginScreenState();
   const [mobileMenuShown, setMobileMenuShown] = useState(false);
   return (
     <div className="flex min-h-screen flex-col items-center">
@@ -93,10 +91,6 @@ const ForgotPassword: NextPage = () => {
           </button>
         </div>
       </div>
-      <LoginScreen
-        loginScreenState={loginScreenState}
-        setLoginScreenState={setLoginScreenState}
-      />
     </div>
   );
 };
