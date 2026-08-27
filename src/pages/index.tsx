@@ -1,5 +1,5 @@
 import { type NextPage } from "next";
-import { GlobeSvg } from "~/components/Svgs";
+import { GlobeSvg } from "~/components/svgs/marketing";
 import { ButtonLink } from "~/components/Button";
 import React from "react";
 import { LanguageHeader } from "~/components/LanguageHeader";

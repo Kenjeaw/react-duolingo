@@ -2,16 +2,14 @@ import type { NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
+import { BigCloseSvg, CloseSvg, DoneSvg } from "~/components/svgs/icons";
 import {
-  BigCloseSvg,
-  CloseSvg,
-  DoneSvg,
   LessonFastForwardEndFailSvg,
   LessonFastForwardEndPassSvg,
   LessonFastForwardStartSvg,
   LessonTopBarEmptyHeart,
   LessonTopBarHeart,
-} from "~/components/Svgs";
+} from "~/components/svgs/lesson";
 import womanPng from "../../public/woman.png";
 import { useBoundStore } from "~/hooks/useBoundStore";
 import { useRouter } from "next/router";

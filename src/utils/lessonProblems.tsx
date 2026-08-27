@@ -1,4 +1,4 @@
-import { AppleSvg, BoySvg, WomanSvg } from "~/components/Svgs";
+import { AppleSvg, BoySvg, WomanSvg } from "~/components/svgs/lesson";
 
 export type Select1Of3Answer = {
   icon: JSX.Element;

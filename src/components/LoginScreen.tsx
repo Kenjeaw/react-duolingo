@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CloseSvg } from "./Svgs";
+import { CloseSvg } from "./svgs/icons";
 import { Button } from "./Button";
 import type { ComponentProps } from "react";
 import React, {

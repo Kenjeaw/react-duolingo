@@ -1,11 +1,13 @@
 import { type NextPage } from "next";
 import Link from "next/link";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { UpArrowSvg } from "~/components/svgs/icons";
 import {
   ActiveBookSvg,
-  LockedBookSvg,
+  ActiveDumbbellSvg,
+  ActiveTreasureSvg,
+  ActiveTrophySvg,
   CheckmarkSvg,
-  LockedDumbbellSvg,
   FastForwardSvg,
   GoldenBookSvg,
   GoldenDumbbellSvg,
@@ -17,15 +19,13 @@ import {
   LessonCompletionSvg2,
   LessonCompletionSvg3,
   LockSvg,
-  StarSvg,
+  LockedBookSvg,
+  LockedDumbbellSvg,
   LockedTreasureSvg,
   LockedTrophySvg,
-  UpArrowSvg,
-  ActiveTreasureSvg,
-  ActiveTrophySvg,
-  ActiveDumbbellSvg,
   PracticeExerciseSvg,
-} from "~/components/Svgs";
+  StarSvg,
+} from "~/components/svgs/learn";
 import { TopBar } from "~/components/TopBar";
 import { BottomBar } from "~/components/BottomBar";
 import { RightBar } from "~/components/RightBar";

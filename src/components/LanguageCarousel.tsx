@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChevronLeftSvg, ChevronRightSvg } from "./Svgs";
+import { ChevronLeftSvg, ChevronRightSvg } from "./svgs/icons";
 import React, { useRef } from "react";
 import languages from "~/utils/languages";
 import { useBoundStore } from "~/hooks/useBoundStore";

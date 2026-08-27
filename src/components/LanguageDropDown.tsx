@@ -1,4 +1,4 @@
-import { ChevronDownSvg } from "./Svgs";
+import { ChevronDownSvg } from "./svgs/icons";
 import { useState } from "react";
 import languages from "~/utils/languages";
 import { Flag } from "./Flag";

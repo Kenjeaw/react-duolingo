@@ -1,30 +1,12 @@
 import Link from "next/link";
-import type { ComponentProps } from "react";
 import React, { useState } from "react";
 import type { Tab } from "./BottomBar";
 import { useBottomBarItems } from "./BottomBar";
 import { useSetLoginScreenState } from "./LoginScreen";
-import { GlobeIconSvg, PodcastIconSvg } from "./Svgs";
+import { LeftBarMoreMenuSvg } from "./svgs/icons";
+import { GlobeIconSvg, PodcastIconSvg } from "./svgs/icons";
 import { useBoundStore } from "~/hooks/useBoundStore";
 import { onEnterOrSpace } from "~/utils/keyboard";
-
-const LeftBarMoreMenuSvg = (props: ComponentProps<"svg">) => {
-  return (
-    <svg width="46" height="46" viewBox="0 0 46 46" fill="none" {...props}>
-      <circle
-        cx="23"
-        cy="23"
-        r="19"
-        fill="#CE82FF"
-        stroke="#CE82FF"
-        strokeWidth="2"
-      />
-      <circle cx="15" cy="23" r="2" fill="white" />
-      <circle cx="23" cy="23" r="2" fill="white" />
-      <circle cx="31" cy="23" r="2" fill="white" />
-    </svg>
-  );
-};
 
 export const LeftBar = ({ selectedTab }: { selectedTab: Tab | null }) => {
   const loggedIn = useBoundStore((x) => x.loggedIn);

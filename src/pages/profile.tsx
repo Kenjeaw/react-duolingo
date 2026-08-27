@@ -2,17 +2,18 @@ import type { NextPage } from "next";
 import { BottomBar } from "~/components/BottomBar";
 import { LeftBar } from "~/components/LeftBar";
 import { ButtonLink } from "~/components/Button";
+import { BronzeLeagueSvg, EmptyMedalSvg } from "~/components/svgs/leaderboard";
 import {
-  BronzeLeagueSvg,
   EditPencilSvg,
-  EmptyFireSvg,
-  FireSvg,
-  LightningProgressSvg,
-  EmptyMedalSvg,
   ProfileFriendsSvg,
   ProfileTimeJoinedSvg,
   SettingsGearSvg,
-} from "~/components/Svgs";
+} from "~/components/svgs/profile";
+import {
+  EmptyFireSvg,
+  FireSvg,
+  LightningProgressSvg,
+} from "~/components/svgs/status";
 import Link from "next/link";
 import { Flag } from "~/components/Flag";
 import { useBoundStore } from "~/hooks/useBoundStore";
