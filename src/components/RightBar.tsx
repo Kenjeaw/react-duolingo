@@ -20,6 +20,7 @@ import { Flag } from "./Flag";
 import { useSetLoginScreenState } from "./LoginScreen";
 import { useLeaderboardRank } from "~/hooks/useLeaderboard";
 import { onEnterOrSpace } from "~/utils/keyboard";
+import { lessonsToUnlockLeaderboard } from "~/utils/constants";
 
 export const RightBar = () => {
   const loggedIn = useBoundStore((x) => x.loggedIn);
@@ -152,9 +153,9 @@ export const RightBar = () => {
             </div>
           </span>
         </article>
-        {loggedIn && lessonsCompleted < 10 ? (
+        {loggedIn && lessonsCompleted < lessonsToUnlockLeaderboard ? (
           <UnlockLeaderboardsSection />
-        ) : loggedIn && lessonsCompleted >= 10 ? (
+        ) : loggedIn && lessonsCompleted >= lessonsToUnlockLeaderboard ? (
           <LeaderboardRankSection />
         ) : null}
         <DailyQuestsSection />
@@ -168,11 +169,12 @@ export const RightBar = () => {
 const UnlockLeaderboardsSection = () => {
   const lessonsCompleted = useBoundStore((x) => x.lessonsCompleted);
 
-  if (lessonsCompleted >= 10) {
+  if (lessonsCompleted >= lessonsToUnlockLeaderboard) {
     return null;
   }
 
-  const lessonsNeededToUnlockLeaderboards = 10 - lessonsCompleted;
+  const lessonsNeededToUnlockLeaderboards =
+    lessonsToUnlockLeaderboard - lessonsCompleted;
 
   return (
     <article className="flex flex-col gap-5 rounded-2xl border-2 border-gray-200 p-6 text-gray-700">

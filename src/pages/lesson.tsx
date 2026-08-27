@@ -13,6 +13,10 @@ import {
 import womanPng from "../../public/woman.png";
 import { useBoundStore } from "~/hooks/useBoundStore";
 import { useRouter } from "next/router";
+import {
+  correctAnswersPerLesson,
+  heartsPerFastForwardTest,
+} from "~/utils/constants";
 import { Button, ButtonLink } from "~/components/Button";
 import type {
   Select1Of3Problem,
@@ -57,13 +61,11 @@ const Lesson: NextPage = () => {
 
   const problem = lessonProblems[lessonProblem] ?? lessonProblems[0];
 
-  const totalCorrectAnswersNeeded = 2;
-
   const [isStartingLesson, setIsStartingLesson] = useState(true);
   const hearts =
     "fast-forward" in router.query &&
     !isNaN(Number(router.query["fast-forward"]))
-      ? 3 - incorrectAnswerCount
+      ? heartsPerFastForwardTest - incorrectAnswerCount
       : null;
 
   const isAnswerCorrect =
@@ -115,7 +117,6 @@ const Lesson: NextPage = () => {
    */
   const flow: LessonFlow = {
     correctAnswerCount,
-    totalCorrectAnswersNeeded,
     hearts,
     quitMessageShown,
     setQuitMessageShown,
@@ -141,7 +142,7 @@ const Lesson: NextPage = () => {
     hearts !== null &&
     hearts >= 0 &&
     !correctAnswerShown &&
-    correctAnswerCount >= totalCorrectAnswersNeeded
+    correctAnswerCount >= correctAnswersPerLesson
   ) {
     return (
       <LessonFastForwardEndPass
@@ -162,7 +163,7 @@ const Lesson: NextPage = () => {
     );
   }
 
-  if (correctAnswerCount >= totalCorrectAnswersNeeded && !correctAnswerShown) {
+  if (correctAnswerCount >= correctAnswersPerLesson && !correctAnswerShown) {
     return (
       <LessonComplete
         correctAnswerCount={correctAnswerCount}
@@ -209,7 +210,6 @@ export default Lesson;
  */
 type LessonFlow = {
   correctAnswerCount: number;
-  totalCorrectAnswersNeeded: number;
   hearts: number | null;
   quitMessageShown: boolean;
   setQuitMessageShown: React.Dispatch<React.SetStateAction<boolean>>;
@@ -247,7 +247,6 @@ const LessonLayout = ({
         <div className="w-full max-w-5xl sm:mt-8 sm:px-5">
           <ProgressBar
             correctAnswerCount={flow.correctAnswerCount}
-            totalCorrectAnswersNeeded={flow.totalCorrectAnswersNeeded}
             setQuitMessageShown={flow.setQuitMessageShown}
             hearts={flow.hearts}
           />
@@ -284,12 +283,10 @@ const LessonLayout = ({
 
 const ProgressBar = ({
   correctAnswerCount,
-  totalCorrectAnswersNeeded,
   setQuitMessageShown,
   hearts,
 }: {
   correctAnswerCount: number;
-  totalCorrectAnswersNeeded: number;
   setQuitMessageShown: (isShown: boolean) => void;
   hearts: null | number;
 }) => {
@@ -314,7 +311,7 @@ const ProgressBar = ({
         role="progressbar"
         aria-valuemin={0}
         aria-valuemax={1}
-        aria-valuenow={correctAnswerCount / totalCorrectAnswersNeeded}
+        aria-valuenow={correctAnswerCount / correctAnswersPerLesson}
       >
         <div
           className={
@@ -322,19 +319,20 @@ const ProgressBar = ({
             (correctAnswerCount > 0 ? "px-2 pt-1" : "")
           }
           style={{
-            width: `${(correctAnswerCount / totalCorrectAnswersNeeded) * 100}%`,
+            width: `${(correctAnswerCount / correctAnswersPerLesson) * 100}%`,
           }}
         >
           <div className="h-[5px] w-full rounded-full bg-green-400"></div>
         </div>
       </div>
       {hearts !== null &&
-        [1, 2, 3].map((heart) => {
-          if (heart <= hearts) {
-            return <LessonTopBarHeart key={heart} />;
-          }
-          return <LessonTopBarEmptyHeart key={heart} />;
-        })}
+        Array.from({ length: heartsPerFastForwardTest }, (_, i) =>
+          i < hearts ? (
+            <LessonTopBarHeart key={i} />
+          ) : (
+            <LessonTopBarEmptyHeart key={i} />
+          ),
+        )}
     </header>
   );
 };

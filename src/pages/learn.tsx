@@ -34,11 +34,11 @@ import { useRouter } from "next/router";
 import { useBoundStore } from "~/hooks/useBoundStore";
 import type { Tile, TileType, Unit } from "~/utils/units";
 import { units } from "~/utils/units";
+import { lessonsPerTile } from "~/utils/constants";
 
 type TileStatus = "LOCKED" | "ACTIVE" | "COMPLETE";
 
 const tileStatus = (tile: Tile, lessonsCompleted: number): TileStatus => {
-  const lessonsPerTile = 4;
   const tilesCompleted = Math.floor(lessonsCompleted / lessonsPerTile);
   const tiles = units.flatMap((unit) => unit.tiles);
   const tileIndex = tiles.findIndex((t) => t === tile);
@@ -417,7 +417,7 @@ const UnitSection = ({ unit }: { unit: Unit }): JSX.Element => {
                           }),
                         ].join(" ")}
                         onClick={() => {
-                          increaseLessonsCompleted(4);
+                          increaseLessonsCompleted(lessonsPerTile);
                           increaseLingots(1);
                         }}
                         disabled={status !== "ACTIVE"}

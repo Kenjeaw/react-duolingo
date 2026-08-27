@@ -17,6 +17,7 @@ import {
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
 import { useLeaderboardUsers } from "~/hooks/useLeaderboard";
+import { lessonsToUnlockLeaderboard } from "~/utils/constants";
 import Image from "next/image";
 
 const LeaderboardExplanationSection = () => {
@@ -126,7 +127,6 @@ const Leaderboard: NextPage = () => {
     }
   }, [loggedIn, router]);
 
-  const lessonsToUnlockLeaderboard = 10;
   const lessonsRemainingToUnlockLeaderboard =
     lessonsToUnlockLeaderboard - lessonsCompleted;
   const leaderboardIsUnlocked = lessonsCompleted >= lessonsToUnlockLeaderboard;

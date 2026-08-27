@@ -1,4 +1,5 @@
 import { units } from "~/utils/units";
+import { lessonsPerTile } from "~/utils/constants";
 import type { BoundStateCreator } from "~/hooks/useBoundStore";
 
 export type LessonSlice = {
@@ -15,7 +16,6 @@ export const createLessonSlice: BoundStateCreator<LessonSlice> = (set) => ({
     })),
   jumpToUnit: (unitNumber: number) =>
     set(({ lessonsCompleted }) => {
-      const lessonsPerTile = 4;
       const totalLessonsToJumpToUnit = units
         .filter((unit) => unit.unitNumber < unitNumber)
         .map((unit) => unit.tiles.length * lessonsPerTile)
