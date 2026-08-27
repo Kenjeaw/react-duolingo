@@ -149,7 +149,7 @@ const ProfileStatsSection = () => {
           </div>
         </div>
         <div className="flex gap-2 rounded-2xl border-2 border-gray-200 p-2 md:gap-3 md:px-6 md:py-4">
-          {top3Finishes === 0 ? <EmptyMedalSvg /> : <EmptyMedalSvg />}
+          <EmptyMedalSvg />
           <div className="flex flex-col">
             <span
               className={[

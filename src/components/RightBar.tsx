@@ -168,11 +168,6 @@ export const RightBar = () => {
 
 const UnlockLeaderboardsSection = () => {
   const lessonsCompleted = useBoundStore((x) => x.lessonsCompleted);
-
-  if (lessonsCompleted >= lessonsToUnlockLeaderboard) {
-    return null;
-  }
-
   const lessonsNeededToUnlockLeaderboards =
     lessonsToUnlockLeaderboard - lessonsCompleted;
 

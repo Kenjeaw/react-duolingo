@@ -464,36 +464,72 @@ const UnitSection = ({ unit }: { unit: Unit }): JSX.Element => {
   );
 };
 
-const getTopBarColors = (
-  scrollY: number,
-): {
-  backgroundColor: `bg-${string}`;
-  borderColor: `border-${string}`;
-} => {
-  const defaultColors = {
-    backgroundColor: "bg-brand",
-    borderColor: "border-brand-dark",
-  } as const;
+const defaultTopBarColors = {
+  backgroundColor: "bg-brand",
+  borderColor: "border-brand-dark",
+} as const;
 
-  if (scrollY < 680) {
-    return defaultColors;
-  } else if (scrollY < 1830) {
-    return units[1] ?? defaultColors;
-  } else {
-    return units[2] ?? defaultColors;
-  }
+/** Height of the fixed top bar. Keep in step with `h-[58px]` in TopBar.tsx. */
+const topBarHeight = 58;
+
+/**
+ * The unit whose section currently sits under the top bar, so the bar can take
+ * that unit's colour.
+ *
+ * This reads the headers' real positions rather than comparing `scrollY` against
+ * fixed pixel offsets: those offsets are measurements of how tall the units
+ * happen to render, and go stale the moment a tile, a unit, or the tile spacing
+ * changes. The observer only wakes up when a header crosses the bar.
+ */
+const useActiveUnitNumber = (): number => {
+  const [activeUnitNumber, setActiveUnitNumber] = useState(
+    units[0]?.unitNumber ?? 1,
+  );
+
+  useEffect(() => {
+    const headers = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-unit-header]"),
+    );
+    if (headers.length === 0) return;
+
+    const recompute = () => {
+      const scrolledPast = headers.filter(
+        (header) => header.getBoundingClientRect().top <= topBarHeight,
+      );
+      // Before the first header reaches the bar, the first unit still owns it.
+      const current = scrolledPast[scrolledPast.length - 1] ?? headers[0];
+      const unitNumber = Number(current?.dataset.unitHeader);
+      if (!Number.isNaN(unitNumber)) setActiveUnitNumber(unitNumber);
+    };
+
+    const observer = new IntersectionObserver(recompute, {
+      rootMargin: `-${topBarHeight}px 0px 0px 0px`,
+    });
+    headers.forEach((header) => observer.observe(header));
+    recompute();
+    return () => observer.disconnect();
+  }, []);
+
+  return activeUnitNumber;
 };
 
 const Learn: NextPage = () => {
+  // Only drives the "jump to top" button's visibility.
   const [scrollY, setScrollY] = useState(0);
   useEffect(() => {
-    const updateScrollY = () => setScrollY(globalThis.scrollY ?? scrollY);
+    const updateScrollY = () => setScrollY(globalThis.scrollY ?? 0);
     updateScrollY();
-    document.addEventListener("scroll", updateScrollY);
+    document.addEventListener("scroll", updateScrollY, { passive: true });
     return () => document.removeEventListener("scroll", updateScrollY);
-  }, [scrollY]);
+  }, []);
 
-  const topBarColors = getTopBarColors(scrollY);
+  const activeUnitNumber = useActiveUnitNumber();
+  const activeUnit = units.find((unit) => unit.unitNumber === activeUnitNumber);
+  const topBarColors = {
+    backgroundColor:
+      activeUnit?.backgroundColor ?? defaultTopBarColors.backgroundColor,
+    borderColor: activeUnit?.borderColor ?? defaultTopBarColors.borderColor,
+  };
 
   return (
     <>
@@ -577,8 +613,15 @@ const HoverLabel = ({
   const [width, setWidth] = useState(72);
 
   useEffect(() => {
-    setWidth(hoverElement.current?.clientWidth ?? width);
-  }, [hoverElement.current?.clientWidth, width]);
+    const element = hoverElement.current;
+    if (!element) return;
+    // A ref is not reactive, so this measures on mount and then whenever the
+    // label actually resizes - a late-loading font being the usual cause.
+    const observer = new ResizeObserver(() => setWidth(element.clientWidth));
+    observer.observe(element);
+    setWidth(element.clientWidth);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div
@@ -611,6 +654,7 @@ const UnitHeader = ({
 }) => {
   return (
     <article
+      data-unit-header={unitNumber}
       className={["max-w-2xl text-white sm:rounded-xl", backgroundColor].join(
         " ",
       )}
