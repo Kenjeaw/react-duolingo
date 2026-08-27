@@ -67,7 +67,7 @@ const Sound: NextPage = () => {
                 <div
                   className={[
                     "absolute h-10 w-10 rounded-xl border-2 border-b-4 bg-white transition-all duration-300",
-                    value ? "border-blue-400" : "border-gray-200",
+                    value ? "border-blue-400" : "border-divider",
                   ].join(" ")}
                   style={{
                     top: "calc(50% - 20px)",

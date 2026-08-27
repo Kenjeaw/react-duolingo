@@ -22,7 +22,7 @@ import Image from "next/image";
 
 const LeaderboardExplanationSection = () => {
   return (
-    <article className="relative hidden h-fit w-96 shrink-0 gap-5 rounded-2xl border-2 border-gray-200 p-6 xl:flex">
+    <article className="relative hidden h-fit w-96 shrink-0 gap-5 rounded-2xl border-2 border-divider p-6 xl:flex">
       <div className="flex flex-col gap-5">
         <h2 className="font-bold uppercase text-gray-400">
           What are leaderboards?
@@ -182,7 +182,7 @@ const Leaderboard: NextPage = () => {
                     {timeLeft()}
                   </time>
                 </div>
-                <div className="w-full border-b-2 border-gray-200"></div>
+                <div className="w-full border-b-2 border-divider"></div>
               </div>
               <div className="w-full">
                 {leaderboardUsers.map((user, i) => {

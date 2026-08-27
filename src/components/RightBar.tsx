@@ -52,7 +52,7 @@ export const RightBar = () => {
             <Flag language={language} width={45} />
             <div>{language.name}</div>
             <div
-              className="absolute top-full z-10 rounded-2xl border-2 border-gray-300 bg-white"
+              className="absolute top-full z-10 rounded-2xl border-2 border-divider-strong bg-white"
               style={{
                 left: "calc(50% - 150px)",
                 width: 300,
@@ -62,12 +62,12 @@ export const RightBar = () => {
               <h2 className="px-5 py-3 font-bold uppercase text-gray-400">
                 My courses
               </h2>
-              <button className="flex w-full items-center gap-3 border-t-2 border-gray-300 bg-blue-100 px-5 py-3 text-left font-bold">
+              <button className="flex w-full items-center gap-3 border-t-2 border-divider-strong bg-blue-100 px-5 py-3 text-left font-bold">
                 <Flag language={language} width={45} />
                 <span className="text-blue-500">{language.name}</span>
               </button>
               <Link
-                className="flex w-full items-center gap-3 rounded-b-2xl border-t-2 border-gray-300 px-5 py-3 text-left font-bold hover:bg-gray-100"
+                className="flex w-full items-center gap-3 rounded-b-2xl border-t-2 border-divider-strong px-5 py-3 text-left font-bold hover:bg-gray-100"
                 href="/register"
               >
                 <span className="flex items-center justify-center rounded-lg border-2 border-gray-400 px-2 text-lg font-bold text-gray-400">
@@ -103,7 +103,7 @@ export const RightBar = () => {
               {streak}
             </span>
             <div
-              className="absolute top-full z-10 flex flex-col gap-5 rounded-2xl border-2 border-gray-300 bg-white p-5 text-black"
+              className="absolute top-full z-10 flex flex-col gap-5 rounded-2xl border-2 border-divider-strong bg-white p-5 text-black"
               style={{
                 left: "calc(50% - 200px)",
                 width: 400,
@@ -131,7 +131,7 @@ export const RightBar = () => {
               {lingots}
             </span>
             <div
-              className="absolute top-full z-10 flex w-72 items-center gap-3 rounded-2xl border-2 border-gray-300 bg-white p-5"
+              className="absolute top-full z-10 flex w-72 items-center gap-3 rounded-2xl border-2 border-divider-strong bg-white p-5"
               style={{
                 left: "calc(50% - 150px)",
                 display: gemsShown ? "flex" : "none",
@@ -172,7 +172,7 @@ const UnlockLeaderboardsSection = () => {
     lessonsToUnlockLeaderboard - lessonsCompleted;
 
   return (
-    <article className="flex flex-col gap-5 rounded-2xl border-2 border-gray-200 p-6 text-gray-700">
+    <article className="flex flex-col gap-5 rounded-2xl border-2 border-divider p-6 text-gray-700">
       <h2 className="text-xl font-bold">Unlock Leaderboards!</h2>
       <div className="flex items-center gap-6">
         <LockedLeaderboardsSvg />
@@ -191,7 +191,7 @@ const LeaderboardRankSection = () => {
   const rank = useLeaderboardRank();
   const leaderboardLeague = "Bronze League";
   return (
-    <article className="flex flex-col gap-5 rounded-2xl border-2 border-gray-200 p-6 text-gray-700">
+    <article className="flex flex-col gap-5 rounded-2xl border-2 border-divider p-6 text-gray-700">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold">{leaderboardLeague}</h2>
         <Link href="/leaderboard" className="font-bold uppercase text-blue-400">
@@ -219,7 +219,7 @@ const DailyQuestsSection = () => {
   const xpToday = useBoundStore((x) => x.xpToday());
   const goalXp = useBoundStore((x) => x.goalXp);
   return (
-    <article className="flex flex-col gap-5 rounded-2xl border-2 border-gray-200 p-6 font-bold text-gray-700">
+    <article className="flex flex-col gap-5 rounded-2xl border-2 border-divider p-6 font-bold text-gray-700">
       <h2 className="text-xl">Daily Quests</h2>
       <div className="flex items-center gap-4">
         <LightningProgressSvg />
@@ -252,7 +252,7 @@ const XpProgressSection = () => {
   const xpToday = useBoundStore((x) => x.xpToday());
   const goalXp = useBoundStore((x) => x.goalXp);
   return (
-    <article className="flex flex-col gap-5 rounded-2xl border-2 border-gray-200 p-6 font-bold text-gray-700">
+    <article className="flex flex-col gap-5 rounded-2xl border-2 border-divider p-6 font-bold text-gray-700">
       <div className="flex items-center justify-between">
         <h2 className="text-xl">XP Progress</h2>
         <Link href="/settings/coach" className="uppercase text-blue-400">
@@ -287,7 +287,7 @@ const XpProgressSection = () => {
 const CreateAProfileSection = () => {
   const setLoginScreenState = useSetLoginScreenState();
   return (
-    <article className="flex flex-col gap-5 rounded-2xl border-2 border-gray-200 p-6 font-bold">
+    <article className="flex flex-col gap-5 rounded-2xl border-2 border-divider p-6 font-bold">
       <h2 className="text-xl">Create a profile to save your progress!</h2>
       <Button onClick={() => setLoginScreenState("SIGNUP")}>
         Create a profile

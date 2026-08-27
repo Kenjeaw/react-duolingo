@@ -34,7 +34,7 @@ const Account: NextPage = () => {
           >
             <div className="font-bold sm:w-1/6">{title}</div>
             <input
-              className="grow rounded-2xl border-2 border-gray-200 p-4 py-2"
+              className="grow rounded-2xl border-2 border-divider p-4 py-2"
               value={value}
               onChange={(e) => setValue(e.target.value)}
             />

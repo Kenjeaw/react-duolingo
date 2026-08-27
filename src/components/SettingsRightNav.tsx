@@ -25,7 +25,7 @@ export const SettingsRightNav = ({
 }) => {
   const settingsPages = useSettingsPages();
   return (
-    <div className="hidden h-fit w-80 flex-col gap-1 rounded-2xl border-2 border-gray-200 p-5 lg:flex">
+    <div className="hidden h-fit w-80 flex-col gap-1 rounded-2xl border-2 border-divider p-5 lg:flex">
       {settingsPages.map(({ title, href }) => {
         return (
           <Link

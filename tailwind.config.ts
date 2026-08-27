@@ -6,12 +6,31 @@ export default {
     extend: {
       colors: {
         /**
-         * Primary brand green. Unit 1 shares this pair, which is why the
-         * top bar looks continuous with the first unit's header.
+         * The app's one green. Every green surface is a step on this ramp:
+         * primary CTAs, the lesson progress bar, correct-answer feedback,
+         * and Unit 1 — which shares `DEFAULT`/`dark` with the top bar, and is
+         * why the two look continuous. Do not reach for Tailwind's `green-*`
+         * for anything that reads as the brand; add a step here instead.
          */
         brand: {
+          /**
+           * Sheen laid over `DEFAULT` — the highlight along the top of the
+           * lesson progress bar. `DEFAULT` mixed 25% with white.
+           */
+          light: "#82d941",
           DEFAULT: "#58cc02",
+          /** Bottom lip of a `DEFAULT` button. `DEFAULT` scaled to 80%. */
           dark: "#46a302",
+          /**
+           * Bottom lip of a `dark` button, which only the marketing pages'
+           * deeper CTA needs. `dark` scaled to 80%, continuing the ramp.
+           */
+          darker: "#388202",
+          /**
+           * Pale wash behind correct-answer feedback, the counterpart to
+           * `bg-red-100` on a wrong answer. `DEFAULT` mixed 85% with white.
+           */
+          tint: "#e6f7d9",
         },
         /**
          * Deep blue surface for the logged-out marketing pages
@@ -28,8 +47,16 @@ export default {
           DEFAULT: "#ddf4ff",
           border: "#84d8ff",
         },
-        /** Divider rules between the nav chrome and page content. */
-        divider: "#e5e5e5",
+        /**
+         * Hairline borders. `DEFAULT` is the app's one border colour: nav
+         * chrome, cards, outline buttons, section rules. `strong` is the
+         * heavier edge that lifts a floating popover or dropdown off the
+         * content it covers — reach for it only when the element floats.
+         */
+        divider: {
+          DEFAULT: "#e5e5e5",
+          strong: "#d1d5db",
+        },
         /** Locked lesson tiles on the learn path. */
         locked: {
           DEFAULT: "#e5e5e5",

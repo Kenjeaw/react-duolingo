@@ -228,8 +228,8 @@ const TileTooltip = ({
   }, [selectedTile, tileTooltipRef, closeTooltip, index]);
 
   const unit = units.find((unit) => unit.unitNumber === unitNumber);
-  const activeBackgroundColor = unit?.backgroundColor ?? "bg-green-500";
-  const activeTextColor = unit?.textColor ?? "text-green-500";
+  const activeBackgroundColor = unit?.backgroundColor ?? "bg-brand";
+  const activeTextColor = unit?.textColor ?? "text-brand";
 
   return (
     <div
@@ -241,11 +241,11 @@ const TileTooltip = ({
     >
       <div
         className={[
-          "absolute z-30 flex w-[300px] flex-col gap-4 rounded-xl p-4 font-bold transition-all duration-300",
+          "absolute z-20 flex w-[300px] flex-col gap-4 rounded-xl p-4 font-bold transition-all duration-300",
           status === "ACTIVE"
             ? activeBackgroundColor
             : status === "LOCKED"
-              ? "border-2 border-gray-200 bg-gray-100"
+              ? "border-2 border-divider bg-gray-100"
               : "bg-yellow-400",
           index === selectedTile ? "top-4 scale-100" : "-top-14 scale-0",
         ].join(" ")}
@@ -257,7 +257,7 @@ const TileTooltip = ({
             status === "ACTIVE"
               ? activeBackgroundColor
               : status === "LOCKED"
-                ? "border-l-2 border-t-2 border-gray-200 bg-gray-100"
+                ? "border-l-2 border-t-2 border-divider bg-gray-100"
                 : "bg-yellow-400",
           ].join(" ")}
           style={{
@@ -280,7 +280,7 @@ const TileTooltip = ({
           <Link
             href="/lesson"
             className={[
-              "flex w-full items-center justify-center rounded-xl border-b-4 border-gray-200 bg-white p-3 uppercase",
+              "flex w-full items-center justify-center rounded-xl border-b-4 border-divider bg-white p-3 uppercase",
               activeTextColor,
             ].join(" ")}
           >
@@ -549,14 +549,14 @@ const Learn: NextPage = () => {
           <div className="sticky bottom-28 left-0 right-0 flex items-end justify-between">
             <Link
               href="/lesson?practice"
-              className="absolute left-4 flex h-16 w-16 items-center justify-center rounded-full border-2 border-b-4 border-gray-200 bg-white transition hover:bg-gray-50 hover:brightness-90 md:left-0"
+              className="absolute left-4 flex h-16 w-16 items-center justify-center rounded-full border-2 border-b-4 border-divider bg-white transition hover:bg-gray-50 hover:brightness-90 md:left-0"
             >
               <span className="sr-only">Practice exercise</span>
               <PracticeExerciseSvg className="h-8 w-8" />
             </Link>
             {scrollY > 100 && (
               <button
-                className="absolute right-4 flex h-14 w-14 items-center justify-center self-end rounded-2xl border-2 border-b-4 border-gray-200 bg-white transition hover:bg-gray-50 hover:brightness-90 md:right-0"
+                className="absolute right-4 flex h-14 w-14 items-center justify-center self-end rounded-2xl border-2 border-b-4 border-divider bg-white transition hover:bg-gray-50 hover:brightness-90 md:right-0"
                 onClick={() => scrollTo(0, 0)}
               >
                 <span className="sr-only">Jump to top</span>
@@ -626,7 +626,7 @@ const HoverLabel = ({
 
   return (
     <div
-      className={`absolute z-10 w-max animate-bounce rounded-lg border-2 border-gray-200 bg-white px-3 py-2 font-bold uppercase ${textColor}`}
+      className={`absolute z-10 w-max animate-bounce rounded-lg border-2 border-divider-strong bg-white px-3 py-2 font-bold uppercase ${textColor}`}
       style={{
         top: "-25%",
         left: `calc(50% - ${width / 2}px)`,
@@ -635,7 +635,7 @@ const HoverLabel = ({
     >
       {text}
       <div
-        className="absolute h-3 w-3 rotate-45 border-b-2 border-r-2 border-gray-200 bg-white"
+        className="absolute h-3 w-3 rotate-45 border-b-2 border-r-2 border-divider-strong bg-white"
         style={{ left: "calc(50% - 8px)", bottom: "-8px" }}
       ></div>
     </div>

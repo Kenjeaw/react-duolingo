@@ -334,14 +334,14 @@ const ProgressBar = ({
       >
         <div
           className={
-            "h-full rounded-full bg-green-500 transition-all duration-700 " +
+            "h-full rounded-full bg-brand transition-all duration-700 " +
             (correctAnswerCount > 0 ? "px-2 pt-1" : "")
           }
           style={{
             width: `${(correctAnswerCount / correctAnswersPerLesson) * 100}%`,
           }}
         >
-          <div className="h-[5px] w-full rounded-full bg-green-400"></div>
+          <div className="h-[5px] w-full rounded-full bg-brand-light"></div>
         </div>
       </div>
       {hearts !== null &&
@@ -410,7 +410,7 @@ const QuitMessage = ({
             Quit
           </ButtonLink>
           <button
-            className="w-full rounded-2xl py-3 font-bold uppercase text-blue-400 transition hover:brightness-90 sm:w-48 sm:border-2 sm:border-b-4 sm:border-gray-300 sm:text-gray-400 sm:hover:bg-gray-100"
+            className="w-full rounded-2xl py-3 font-bold uppercase text-blue-400 transition hover:brightness-90 sm:w-48 sm:border-2 sm:border-b-4 sm:border-divider sm:text-gray-400 sm:hover:bg-gray-100"
             onClick={() => setQuitMessageShown(false)}
           >
             Stay
@@ -440,7 +440,7 @@ const CheckAnswer = ({
 }) => {
   return (
     <>
-      <section className="border-gray-200 sm:border-t-2 sm:p-10">
+      <section className="border-divider sm:border-t-2 sm:p-10">
         <div className="mx-auto flex max-w-5xl sm:justify-between">
           <Button
             variant="secondary"
@@ -465,7 +465,7 @@ const CheckAnswer = ({
         className={
           correctAnswerShown
             ? isAnswerCorrect
-              ? "fixed bottom-0 left-0 right-0 bg-lime-100 font-bold text-green-600 transition-all"
+              ? "fixed bottom-0 left-0 right-0 bg-brand-tint font-bold text-brand-dark transition-all"
               : "fixed bottom-0 left-0 right-0 bg-red-100 font-bold text-red-500 transition-all"
             : "fixed -bottom-52 left-0 right-0"
         }
@@ -474,7 +474,7 @@ const CheckAnswer = ({
           <>
             {isAnswerCorrect ? (
               <div className="mb-2 flex flex-col gap-5 sm:flex-row sm:items-center">
-                <div className="hidden rounded-full bg-white p-5 text-green-500 sm:block">
+                <div className="hidden rounded-full bg-white p-5 text-brand sm:block">
                   <DoneSvg />
                 </div>
                 <div className="text-2xl">Good job!</div>
@@ -534,7 +534,7 @@ const ProblemSelect1Of3 = ({
               className={
                 i === selectedAnswer
                   ? "cursor-pointer rounded-xl border-2 border-b-4 border-blue-300 bg-blue-100 p-4 text-blue-400"
-                  : "cursor-pointer rounded-xl border-2 border-b-4 border-gray-200 p-4 hover:bg-gray-100"
+                  : "cursor-pointer rounded-xl border-2 border-b-4 border-divider p-4 hover:bg-gray-100"
               }
               role="radio"
               aria-checked={i === selectedAnswer}
@@ -577,10 +577,10 @@ const ProblemWriteInEnglish = ({
       <div className="w-full">
         <div className="flex items-center gap-2 px-2">
           <Image src={womanPng} alt="" width={92} height={115} />
-          <div className="relative ml-2 w-fit rounded-2xl border-2 border-gray-200 p-4">
+          <div className="relative ml-2 w-fit rounded-2xl border-2 border-divider p-4">
             {question}
             <div
-              className="absolute h-4 w-4 rotate-45 border-b-2 border-l-2 border-gray-200 bg-white"
+              className="absolute h-4 w-4 rotate-45 border-b-2 border-l-2 border-divider bg-white"
               style={{
                 top: "calc(50% - 8px)",
                 left: "-10px",
@@ -589,12 +589,12 @@ const ProblemWriteInEnglish = ({
           </div>
         </div>
 
-        <div className="flex min-h-[60px] flex-wrap gap-1 border-b-2 border-t-2 border-gray-200 py-1">
+        <div className="flex min-h-[60px] flex-wrap gap-1 border-b-2 border-t-2 border-divider py-1">
           {selectedAnswers.map((i) => {
             return (
               <button
                 key={i}
-                className="rounded-2xl border-2 border-b-4 border-gray-200 p-2 text-gray-700"
+                className="rounded-2xl border-2 border-b-4 border-divider p-2 text-gray-700"
                 onClick={() => {
                   setSelectedAnswers((selectedAnswers) => {
                     return selectedAnswers.filter((x) => x !== i);
@@ -614,8 +614,8 @@ const ProblemWriteInEnglish = ({
               key={i}
               className={
                 selectedAnswers.includes(i)
-                  ? "rounded-2xl border-2 border-b-4 border-gray-200 bg-gray-200 p-2 text-gray-200"
-                  : "rounded-2xl border-2 border-b-4 border-gray-200 p-2 text-gray-700"
+                  ? "rounded-2xl border-2 border-b-4 border-divider bg-gray-200 p-2 text-gray-200"
+                  : "rounded-2xl border-2 border-b-4 border-divider p-2 text-gray-700"
               }
               disabled={selectedAnswers.includes(i)}
               onClick={() =>
@@ -654,7 +654,7 @@ const LessonEndFooter = ({
 }) => {
   return (
     <>
-      <section className="border-gray-200 sm:border-t-2 sm:p-10">
+      <section className="border-divider sm:border-t-2 sm:p-10">
         <div className="mx-auto flex max-w-5xl sm:justify-between">
           <Button
             variant="secondary"
@@ -791,9 +791,9 @@ const ReviewLesson = ({
         ].join(" ")}
         onClick={() => setReviewLessonShown(false)}
       ></div>
-      <div className="relative flex w-full max-w-4xl flex-col gap-5 rounded-2xl border-2 border-gray-200 bg-white p-8">
+      <div className="relative flex w-full max-w-4xl flex-col gap-5 rounded-2xl border-2 border-divider bg-white p-8">
         <button
-          className="absolute -right-5 -top-5 rounded-full border-2 border-gray-200 bg-gray-100 p-1 text-gray-400 hover:brightness-90"
+          className="absolute -right-5 -top-5 rounded-full border-2 border-divider bg-gray-100 p-1 text-gray-400 hover:brightness-90"
           onClick={() => setReviewLessonShown(false)}
         >
           <BigCloseSvg className="h-8 w-8" />
@@ -835,9 +835,9 @@ const ReviewLesson = ({
                 </div>
                 <div>{questionResult.yourResponse}</div>
                 {selectedQuestionResult === questionResult && (
-                  <div className="absolute left-1 right-1 top-20 z-10 rounded-2xl border-2 border-gray-200 bg-white p-3 text-sm tracking-tighter">
+                  <div className="absolute left-1 right-1 top-20 z-10 rounded-2xl border-2 border-divider-strong bg-white p-3 text-sm tracking-tighter">
                     <div
-                      className="absolute -top-2 h-3 w-3 rotate-45 border-l-2 border-t-2 border-gray-200 bg-white"
+                      className="absolute -top-2 h-3 w-3 rotate-45 border-l-2 border-t-2 border-divider-strong bg-white"
                       style={{ left: "calc(50% - 6px)" }}
                     ></div>
                     <div className="font-bold uppercase text-gray-400">
@@ -882,7 +882,7 @@ const LessonFastForwardStart = ({
         </p>
       </div>
       <div className="flex flex-col gap-5"></div>
-      <section className="border-gray-200 sm:border-t-2 sm:p-10">
+      <section className="border-divider sm:border-t-2 sm:p-10">
         <div className="mx-auto flex max-w-5xl flex-col-reverse items-center gap-5 sm:flex-row sm:justify-between">
           <Link
             href="/learn"

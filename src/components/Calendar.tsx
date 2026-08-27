@@ -38,7 +38,7 @@ export const Calendar = ({
   const staticNow = dayjs();
   const calendarDays = getCalendarDays(now);
   return (
-    <article className="flex flex-col rounded-xl border-2 border-gray-300 p-3 text-gray-400">
+    <article className="flex flex-col rounded-xl border-2 border-divider-strong p-3 text-gray-400">
       <header className="flex items-center justify-between gap-3">
         <button
           className="text-gray-400"

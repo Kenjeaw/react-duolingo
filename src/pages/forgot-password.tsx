@@ -47,7 +47,7 @@ const ForgotPassword: NextPage = () => {
             </button>
             <Link
               href="/register"
-              className="rounded-2xl border-b-4 border-green-600 bg-green-500 px-4 py-2 uppercase text-white transition hover:brightness-110"
+              className="rounded-2xl border-b-4 border-brand-dark bg-brand px-4 py-2 uppercase text-white transition hover:brightness-110"
             >
               Get started
             </Link>
@@ -63,7 +63,7 @@ const ForgotPassword: NextPage = () => {
           >
             <MenuIconSvg aria-hidden="true" />
             {mobileMenuShown && (
-              <div className="absolute right-0 top-full rounded-2xl border-2 border-gray-300 bg-white font-bold text-gray-700">
+              <div className="absolute right-0 top-full rounded-2xl border-2 border-divider-strong bg-white font-bold text-gray-700">
                 <Link
                   className="block min-w-max cursor-pointer rounded-t-2xl px-5 py-2 hover:bg-gray-100"
                   href="/?login"
@@ -71,12 +71,12 @@ const ForgotPassword: NextPage = () => {
                   Sign in
                 </Link>
                 <Link
-                  className="block min-w-max cursor-pointer border-t-2 border-gray-300 px-5 py-2 hover:bg-gray-100"
+                  className="block min-w-max cursor-pointer border-t-2 border-divider-strong px-5 py-2 hover:bg-gray-100"
                   href="/register"
                 >
                   Get started
                 </Link>
-                <div className="min-w-max rounded-b-2xl border-t-2 border-gray-300 px-5 py-2">
+                <div className="min-w-max rounded-b-2xl border-t-2 border-divider-strong px-5 py-2">
                   Site language: English
                 </div>
               </div>
@@ -93,7 +93,7 @@ const ForgotPassword: NextPage = () => {
         </p>
         <div className="flex w-full flex-col gap-2">
           <input
-            className="w-full rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
+            className="w-full rounded-2xl border-2 border-divider bg-gray-50 px-4 py-3"
             placeholder="Email"
             aria-label="Email"
           />

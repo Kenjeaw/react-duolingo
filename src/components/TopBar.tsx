@@ -152,7 +152,7 @@ export const TopBar = ({
                       <PodcastIconSvg className="h-10 w-10" />
                       Podcast
                     </div>
-                    <div className="flex items-center gap-2 border-t-2 border-gray-300 p-2 font-bold text-gray-700">
+                    <div className="flex items-center gap-2 border-t-2 border-divider-strong p-2 font-bold text-gray-700">
                       <GlobeIconSvg className="h-10 w-10" />
                       Schools
                     </div>

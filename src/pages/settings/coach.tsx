@@ -38,7 +38,7 @@ const Coach: NextPage = () => {
                   "flex w-full items-center justify-between border-2 p-4 first:rounded-t-2xl last:rounded-b-2xl last:border-b-2",
                   xp === localGoalXp
                     ? "border-b-2 border-blue-400 bg-blue-100 text-blue-500"
-                    : "border-t-0 border-gray-200 first:border-t-2 hover:bg-gray-100",
+                    : "border-t-0 border-divider first:border-t-2 hover:bg-gray-100",
                   goalXpOptions[i + 1]?.xp === localGoalXp ? "border-b-0" : "",
                 ].join(" ")}
                 onClick={() => setLocalGoalXp(xp)}

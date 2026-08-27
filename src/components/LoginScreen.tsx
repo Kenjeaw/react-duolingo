@@ -190,14 +190,14 @@ const LoginScreen = ({
               <>
                 <div className="relative flex grow">
                   <input
-                    className="grow rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
+                    className="grow rounded-2xl border-2 border-divider bg-gray-50 px-4 py-3"
                     placeholder="Age (optional)"
                     aria-label="Age (optional)"
                   />
                   <div className="absolute bottom-0 right-0 top-0 flex items-center justify-center pr-4">
                     <button
                       type="button"
-                      className="relative flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border-2 border-gray-200 text-gray-400"
+                      className="relative flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border-2 border-divider text-gray-400"
                       onMouseEnter={() => setAgeTooltipShown(true)}
                       onMouseLeave={() => setAgeTooltipShown(false)}
                       onClick={() => setAgeTooltipShown((x) => !x)}
@@ -206,7 +206,7 @@ const LoginScreen = ({
                     >
                       ?
                       {ageTooltipShown && (
-                        <div className="absolute -right-5 top-full z-10 w-72 rounded-2xl border-2 border-gray-200 bg-white p-4 text-center text-xs leading-5 text-gray-800">
+                        <div className="absolute -right-5 top-full z-10 w-72 rounded-2xl border-2 border-divider bg-white p-4 text-center text-xs leading-5 text-gray-800">
                           Providing your age ensures you get the right Duolingo
                           experience. For more details, please visit our Privacy
                           Policy.
@@ -216,7 +216,7 @@ const LoginScreen = ({
                   </div>
                 </div>
                 <input
-                  className="grow rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
+                  className="grow rounded-2xl border-2 border-divider bg-gray-50 px-4 py-3"
                   placeholder="Name (optional)"
                   aria-label="Name (optional)"
                   ref={nameInputRef}
@@ -224,13 +224,13 @@ const LoginScreen = ({
               </>
             )}
             <input
-              className="grow rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
+              className="grow rounded-2xl border-2 border-divider bg-gray-50 px-4 py-3"
               placeholder={emailLabel}
               aria-label={emailLabel}
             />
             <div className="relative flex grow">
               <input
-                className="grow rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
+                className="grow rounded-2xl border-2 border-divider bg-gray-50 px-4 py-3"
                 placeholder="Password (optional)"
                 aria-label="Password (optional)"
                 type="password"
@@ -257,13 +257,13 @@ const LoginScreen = ({
           </div>
           <div className="flex gap-5">
             <button
-              className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-b-4 border-gray-200 py-3 font-bold text-blue-900 transition hover:bg-gray-50 hover:brightness-90"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-b-4 border-divider py-3 font-bold text-blue-900 transition hover:bg-gray-50 hover:brightness-90"
               onClick={logInAndSetUserProperties}
             >
               <FacebookLogoSvg className="h-5 w-5" /> Facebook
             </button>
             <button
-              className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-b-4 border-gray-200 py-3 font-bold text-blue-600 transition hover:bg-gray-50 hover:brightness-90"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-b-4 border-divider py-3 font-bold text-blue-600 transition hover:bg-gray-50 hover:brightness-90"
               onClick={logInAndSetUserProperties}
             >
               <GoogleLogoSvg className="h-5 w-5" /> Google

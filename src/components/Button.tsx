@@ -39,17 +39,17 @@ const baseClass = "rounded-2xl font-bold uppercase transition";
 
 const variantClass: Record<ButtonVariant, string> = {
   primary:
-    "border-b-4 border-green-600 bg-green-500 text-white hover:brightness-110",
+    "border-b-4 border-brand-dark bg-brand text-white hover:brightness-110",
   /** Deeper green for the marketing pages, which sit on `bg-marketing`. */
   primaryDeep:
-    "border-b-4 border-green-700 bg-green-600 text-white hover:brightness-110",
+    "border-b-4 border-brand-darker bg-brand-dark text-white hover:brightness-110",
   info: "border-b-4 border-blue-500 bg-blue-400 text-white hover:brightness-110",
   danger: "border-b-4 border-red-600 bg-red-500 text-white hover:brightness-110",
   secondary:
-    "border-2 border-b-4 border-gray-200 bg-white text-gray-400 hover:bg-gray-50 hover:brightness-90",
+    "border-2 border-b-4 border-divider bg-white text-gray-400 hover:bg-gray-50 hover:brightness-90",
   /** Outline button whose label is the accent blue rather than grey. */
   secondaryAccent:
-    "border-2 border-b-4 border-gray-200 bg-white text-blue-400 hover:bg-gray-50 hover:brightness-90",
+    "border-2 border-b-4 border-divider bg-white text-blue-400 hover:bg-gray-50 hover:brightness-90",
 };
 
 /** Applied to <button> only; an <a> cannot be disabled. */
