@@ -1,3 +1,4 @@
+import type { JSX } from "react";
 import { AppleSvg, BoySvg, WomanSvg } from "~/components/svgs/lesson";
 
 export type Select1Of3Answer = {

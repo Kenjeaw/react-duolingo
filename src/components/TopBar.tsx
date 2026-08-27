@@ -1,3 +1,4 @@
+import type { JSX } from "react";
 import dayjs from "dayjs";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";

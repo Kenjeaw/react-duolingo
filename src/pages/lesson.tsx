@@ -53,8 +53,12 @@ const Lesson: NextPage = () => {
 
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
 
-  const startTime = useRef(Date.now());
-  const endTime = useRef(startTime.current + 1000 * 60 * 3 + 1000 * 33);
+  const startTime = useRef(0);
+  const endTime = useRef(0);
+  useEffect(() => {
+    startTime.current = Date.now();
+    endTime.current = startTime.current + 1000 * 60 * 3 + 1000 * 33;
+  }, []);
 
   const [questionResults, setQuestionResults] = useState<QuestionResult[]>([]);
   const [reviewLessonShown, setReviewLessonShown] = useState(false);

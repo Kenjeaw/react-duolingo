@@ -103,7 +103,13 @@ const useLoginScreen = () => {
     return "HIDDEN";
   })();
   const [loginScreenState, setLoginScreenState] = useState(queryState);
-  useEffect(() => setLoginScreenState(queryState), [queryState]);
+  // Sync to the query-derived state during render rather than in an effect,
+  // per https://react.dev/learn/you-might-not-need-an-effect
+  const [prevQueryState, setPrevQueryState] = useState(queryState);
+  if (prevQueryState !== queryState) {
+    setPrevQueryState(queryState);
+    setLoginScreenState(queryState);
+  }
   return { loginScreenState, setLoginScreenState };
 };
 
