@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Link from "next/link";
 import type { ComponentProps } from "react";
-import { Button } from "~/components/Button";
+import { Button, ButtonLink } from "~/components/Button";
 import React, { useState } from "react";
 import { LanguageDropDown } from "~/components/LanguageDropDown";
 import { useSetLoginScreenState } from "~/components/LoginScreen";
@@ -39,18 +39,16 @@ const ForgotPassword: NextPage = () => {
           </Link>
           <div className="hidden items-center gap-5 md:flex">
             <LanguageDropDown />
-            <button
-              className="rounded-2xl border-b-4 border-blue-300 bg-white px-4 py-2 uppercase text-blue-800 transition hover:brightness-110"
+            <Button
+              variant="onBlue"
+              size="sm"
               onClick={() => setLoginScreenState("LOGIN")}
             >
               Login
-            </button>
-            <Link
-              href="/register"
-              className="rounded-2xl border-b-4 border-brand-dark bg-brand px-4 py-2 uppercase text-white transition hover:brightness-110"
-            >
+            </Button>
+            <ButtonLink variant="primary" size="sm" href="/register">
               Get started
-            </Link>
+            </ButtonLink>
           </div>
           <div
             className="relative flex md:hidden"

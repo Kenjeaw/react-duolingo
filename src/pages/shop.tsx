@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import React from "react";
 
 import { BottomBar } from "~/components/BottomBar";
+import { Button } from "~/components/Button";
 import { LeftBar } from "~/components/LeftBar";
 import { RightBar } from "~/components/RightBar";
 import { TopBar } from "~/components/TopBar";
@@ -35,12 +36,14 @@ const Shop: NextPage = () => {
                 <div className="w-fit rounded-full bg-gray-200 px-3 py-1 text-sm font-bold uppercase text-gray-400">
                   {streakFreezes} / 2 equipped
                 </div>
-                <button
-                  className="flex w-fit items-center gap-1 rounded-2xl border-2 border-divider bg-white px-4 py-2 text-sm font-bold uppercase text-gray-300"
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="flex w-fit items-center gap-1 text-sm"
                   disabled
                 >
                   Get one for: <EmptyGemSvg /> 10
-                </button>
+                </Button>
               </section>
             </div>
             <div className="flex border-t-2 border-divider py-5">
@@ -51,12 +54,14 @@ const Shop: NextPage = () => {
                   Attempt to double your five lingot wager by maintaining a
                   seven day streak.
                 </p>
-                <button
-                  className="flex w-fit items-center gap-1 rounded-2xl border-2 border-divider bg-white px-4 py-2 text-sm font-bold uppercase text-gray-300"
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="flex w-fit items-center gap-1 text-sm"
                   disabled
                 >
                   Get for: <EmptyGemSvg /> 5
-                </button>
+                </Button>
               </section>
             </div>
           </div>
@@ -69,9 +74,13 @@ const Shop: NextPage = () => {
                 <p className="text-sm text-gray-500">
                   {`Celebrate Duolingo's 10 year anniversary with a new exclusive Duo plushie!`}
                 </p>
-                <button className="flex w-fit items-center gap-1 rounded-2xl border-2 border-b-4 border-divider bg-white px-4 py-3 text-sm font-bold uppercase text-red-500">
+                <Button
+                  variant="secondaryDanger"
+                  size="none"
+                  className="flex w-fit items-center gap-1 px-4 py-3 text-sm"
+                >
                   $29.99
-                </button>
+                </Button>
               </section>
             </div>
           </div>

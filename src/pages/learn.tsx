@@ -194,6 +194,16 @@ const getTileColors = ({
   }
 };
 
+/**
+ * The shape shared by the tooltip's CTA in all three tile states. Only the
+ * colours differ between them, so they live at the call sites — but the box
+ * itself is defined once, or the states drift and the tooltip changes height
+ * as you move between tiles. It is not a `Button` variant because the ACTIVE
+ * state's label colour comes from the unit at runtime.
+ */
+const tileTooltipCtaClass =
+  "flex w-full items-center justify-center rounded-xl border-b-4 p-3 uppercase transition";
+
 const TileTooltip = ({
   selectedTile,
   index,
@@ -280,7 +290,8 @@ const TileTooltip = ({
           <Link
             href="/lesson"
             className={[
-              "flex w-full items-center justify-center rounded-xl border-b-4 border-divider bg-white p-3 uppercase",
+              tileTooltipCtaClass,
+              "border-divider bg-white",
               activeTextColor,
             ].join(" ")}
           >
@@ -288,7 +299,10 @@ const TileTooltip = ({
           </Link>
         ) : status === "LOCKED" ? (
           <button
-            className="w-full rounded-xl bg-gray-200 p-3 uppercase text-gray-400"
+            className={[
+              tileTooltipCtaClass,
+              "border-gray-300 bg-gray-200 text-gray-400",
+            ].join(" ")}
             disabled
           >
             Locked
@@ -296,7 +310,10 @@ const TileTooltip = ({
         ) : (
           <Link
             href="/lesson"
-            className="flex w-full items-center justify-center rounded-xl border-b-4 border-yellow-200 bg-white p-3 uppercase text-yellow-400"
+            className={[
+              tileTooltipCtaClass,
+              "border-yellow-200 bg-white text-yellow-400",
+            ].join(" ")}
           >
             Practice +5 XP
           </Link>

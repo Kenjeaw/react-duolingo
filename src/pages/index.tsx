@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
 import { GlobeSvg } from "~/components/svgs/marketing";
-import { ButtonLink } from "~/components/Button";
+import { Button, ButtonLink } from "~/components/Button";
 import React from "react";
 import { LanguageHeader } from "~/components/LanguageHeader";
 import { useSetLoginScreenState } from "~/components/LoginScreen";
@@ -38,12 +38,14 @@ const Home: NextPage = () => {
             >
               Get started
             </ButtonLink>
-            <button
-              className="w-full rounded-2xl border-2 border-b-4 border-marketing-border bg-marketing px-8 py-3 font-bold uppercase transition hover:bg-marketing-hover md:min-w-[320px]"
+            <Button
+              variant="marketing"
+              size="none"
+              className="w-full px-8 py-3 md:min-w-[320px]"
               onClick={() => setLoginScreenState("LOGIN")}
             >
               I already have an account
-            </button>
+            </Button>
           </div>
         </div>
       </div>

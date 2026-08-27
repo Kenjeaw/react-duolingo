@@ -256,18 +256,24 @@ const LoginScreen = ({
             <div className="h-[2px] grow bg-gray-300"></div>
           </div>
           <div className="flex gap-5">
-            <button
-              className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-b-4 border-divider py-3 font-bold text-blue-900 transition hover:bg-gray-50 hover:brightness-90"
+            <Button
+              variant="secondaryAccent"
+              size="none"
+              fullWidth
+              className="gap-2 py-3"
               onClick={logInAndSetUserProperties}
             >
               <FacebookLogoSvg className="h-5 w-5" /> Facebook
-            </button>
-            <button
-              className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-b-4 border-divider py-3 font-bold text-blue-600 transition hover:bg-gray-50 hover:brightness-90"
+            </Button>
+            <Button
+              variant="secondaryAccent"
+              size="none"
+              fullWidth
+              className="gap-2 py-3"
               onClick={logInAndSetUserProperties}
             >
               <GoogleLogoSvg className="h-5 w-5" /> Google
-            </button>
+            </Button>
           </div>
           <p className="text-center text-xs leading-5 text-gray-400">
             By signing in to Duolingo, you agree to our Terms and Privacy

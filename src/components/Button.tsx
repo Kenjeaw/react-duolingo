@@ -10,11 +10,14 @@ import React from "react";
  * the point of this component is that there is exactly one definition of what a
  * green button looks like.
  *
- * `className` is for layout only (width, display, breakpoint visibility). Do not
- * pass colour, border, padding or font utilities through it: Tailwind resolves
- * conflicting utilities by stylesheet order, not by the order they appear in the
- * attribute, so an override there wins or loses unpredictably. If a call site
- * needs different colours, it needs a variant.
+ * `className` must not carry a utility that competes with one the variant or
+ * size already sets — no colour, no border, no padding, no rounding. Tailwind
+ * resolves conflicting utilities by stylesheet order, not by the order they
+ * appear in the attribute, so an override there wins or loses unpredictably.
+ * Utilities on properties no variant touches (width, display, gap, breakpoint
+ * visibility, font size) are fine, and `size="none"` frees up padding for a
+ * call site that genuinely needs its own. If a call site needs different
+ * colours, it needs a variant.
  */
 export type ButtonVariant =
   | "primary"
@@ -22,7 +25,10 @@ export type ButtonVariant =
   | "info"
   | "danger"
   | "secondary"
-  | "secondaryAccent";
+  | "secondaryAccent"
+  | "secondaryDanger"
+  | "onBlue"
+  | "marketing";
 
 /**
  * `block` is the square padding the lesson footer buttons use; `sm` and `md`
@@ -44,12 +50,29 @@ const variantClass: Record<ButtonVariant, string> = {
   primaryDeep:
     "border-b-4 border-brand-darker bg-brand-dark text-white hover:brightness-110",
   info: "border-b-4 border-blue-500 bg-blue-400 text-white hover:brightness-110",
-  danger: "border-b-4 border-red-600 bg-red-500 text-white hover:brightness-110",
+  danger:
+    "border-b-4 border-red-600 bg-red-500 text-white hover:brightness-110",
   secondary:
     "border-2 border-b-4 border-divider bg-white text-gray-400 hover:bg-gray-50 hover:brightness-90",
   /** Outline button whose label is the accent blue rather than grey. */
   secondaryAccent:
     "border-2 border-b-4 border-divider bg-white text-blue-400 hover:bg-gray-50 hover:brightness-90",
+  /** Outline button whose label is red — a price, or a destructive action. */
+  secondaryDanger:
+    "border-2 border-b-4 border-divider bg-white text-red-500 hover:bg-gray-50 hover:brightness-90",
+  /**
+   * White button for a coloured header bar. Its lip and label are tuned to
+   * the `bg-blue-400` header on `/forgot-password`, its only call site — check
+   * the contrast against the surface before reusing it elsewhere.
+   */
+  onBlue:
+    "border-b-4 border-blue-300 bg-white text-blue-800 hover:brightness-110",
+  /**
+   * Reads as an outline button against `bg-marketing`, which it shares a fill
+   * with. Pairs with `primaryDeep` as the secondary CTA on the landing page.
+   */
+  marketing:
+    "border-2 border-b-4 border-marketing-border bg-marketing text-white hover:bg-marketing-hover",
 };
 
 /** Applied to <button> only; an <a> cannot be disabled. */
