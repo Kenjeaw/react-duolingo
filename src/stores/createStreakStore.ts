@@ -25,7 +25,13 @@ const getCurrentStreak = (activeDays: ActiveDays): number => {
 
 export type StreakSlice = {
   activeDays: ActiveDays;
-  streak: number;
+  /**
+   * Derived from `activeDays` on every read rather than stored, so a streak the
+   * reader has already broken cannot keep showing its old length. A stored
+   * number is only recomputed when a lesson ends, which leaves it wrong for
+   * every render between midnight and the next completed lesson.
+   */
+  streak: () => number;
   isActiveDay: (day: dayjs.Dayjs) => boolean;
   addToday: () => void;
 };
@@ -35,10 +41,9 @@ export const createStreakSlice: BoundStateCreator<StreakSlice> = (
   get,
 ) => ({
   activeDays: new Set(),
-  streak: 0,
+  streak: () => getCurrentStreak(get().activeDays),
   isActiveDay: (day: dayjs.Dayjs) => isActiveDay(get().activeDays, day),
   addToday: () => {
-    const activeDays = addActiveDay(get().activeDays, dayjs());
-    set({ activeDays, streak: getCurrentStreak(activeDays) });
+    set({ activeDays: addActiveDay(get().activeDays, dayjs()) });
   },
 });

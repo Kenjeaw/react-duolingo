@@ -26,7 +26,7 @@ export const TopBar = ({
 }) => {
   const [menu, setMenu] = useState<MenuState>("HIDDEN");
   const [now, setNow] = useState(dayjs());
-  const streak = useBoundStore((x) => x.streak);
+  const streak = useBoundStore((x) => x.streak());
   const lingots = useBoundStore((x) => x.lingots);
   const language = useBoundStore((x) => x.language);
 

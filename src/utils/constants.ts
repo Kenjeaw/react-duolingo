@@ -24,7 +24,9 @@ export const lessonsToUnlockLeaderboard = 10;
 export const correctAnswersPerLesson = 2;
 
 /**
- * Wrong answers allowed in a fast-forward test before it fails. The progress
- * bar draws exactly this many hearts, so the count and the drawing share it.
+ * Hearts a fast-forward test starts with. Each wrong answer costs one, and the
+ * test fails when the last one goes, so this is also the number of mistakes
+ * that ends it. The progress bar draws exactly this many hearts, so the count
+ * and the drawing share it.
  */
 export const heartsPerFastForwardTest = 3;

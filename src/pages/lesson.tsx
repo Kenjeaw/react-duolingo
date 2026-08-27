@@ -13,6 +13,7 @@ import {
 import womanPng from "../../public/woman.png";
 import { useBoundStore } from "~/hooks/useBoundStore";
 import { useRouter } from "next/router";
+import type { ParsedUrlQuery } from "querystring";
 import {
   correctAnswersPerLesson,
   heartsPerFastForwardTest,
@@ -23,6 +24,19 @@ import type {
   WriteInEnglishProblem,
 } from "~/utils/lessonProblems";
 import { lessonProblems, tilesToSentence } from "~/utils/lessonProblems";
+
+/**
+ * The unit a fast-forward test is trying to unlock, or `null` when this is an
+ * ordinary lesson. An absent, empty, or non-numeric `fast-forward` value all mean
+ * "not a fast-forward test": `Number("")` is `0`, not `NaN`, so the empty case
+ * has to be rejected before the conversion rather than after it.
+ */
+const getFastForwardUnitNumber = (query: ParsedUrlQuery): number | null => {
+  const value = query["fast-forward"];
+  if (typeof value !== "string" || value.trim() === "") return null;
+  const unitNumber = Number(value);
+  return Number.isInteger(unitNumber) && unitNumber > 0 ? unitNumber : null;
+};
 
 const numbersEqual = (a: readonly number[], b: readonly number[]): boolean => {
   return a.length === b.length && a.every((_, i) => a[i] === b[i]);
@@ -66,9 +80,9 @@ const Lesson: NextPage = () => {
   const problem = lessonProblems[lessonProblem] ?? lessonProblems[0];
 
   const [isStartingLesson, setIsStartingLesson] = useState(true);
+  const fastForwardUnitNumber = getFastForwardUnitNumber(router.query);
   const hearts =
-    "fast-forward" in router.query &&
-    !isNaN(Number(router.query["fast-forward"]))
+    fastForwardUnitNumber !== null
       ? heartsPerFastForwardTest - incorrectAnswerCount
       : null;
 
@@ -113,7 +127,8 @@ const Lesson: NextPage = () => {
     setCorrectAnswerShown(true);
   };
 
-  const unitNumber = Number(router.query["fast-forward"]);
+  // Only read by the fast-forward screens, which render only when `hearts` is set.
+  const unitNumber = fastForwardUnitNumber ?? 0;
 
   /**
    * Everything the lesson chrome needs, bundled so each problem component
@@ -131,7 +146,7 @@ const Lesson: NextPage = () => {
     onSkip,
   };
 
-  if (hearts !== null && hearts < 0 && !correctAnswerShown) {
+  if (hearts !== null && hearts <= 0 && !correctAnswerShown) {
     return (
       <LessonFastForwardEndFail
         unitNumber={unitNumber}
@@ -144,7 +159,7 @@ const Lesson: NextPage = () => {
 
   if (
     hearts !== null &&
-    hearts >= 0 &&
+    hearts > 0 &&
     !correctAnswerShown &&
     correctAnswerCount >= correctAnswersPerLesson
   ) {

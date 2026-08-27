@@ -35,7 +35,7 @@ export const createXpSlice: BoundStateCreator<XpSlice> = (set, get) => ({
   xpThisWeek: () => {
     return sum(
       range(0, dayjs().day() + 1).map((daysBack) =>
-        xpAt(get().xpByDate, dayjs().add(-daysBack)),
+        xpAt(get().xpByDate, dayjs().add(-daysBack, "day")),
       ),
     );
   },

@@ -107,7 +107,7 @@ const ProfileTopSection = () => {
 };
 
 const ProfileStatsSection = () => {
-  const streak = useBoundStore((x) => x.streak);
+  const streak = useBoundStore((x) => x.streak());
   const totalXp = 125;
   const league = "Bronze";
   const top3Finishes = 0;

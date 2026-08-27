@@ -25,7 +25,7 @@ import { lessonsToUnlockLeaderboard } from "~/utils/constants";
 export const RightBar = () => {
   const loggedIn = useBoundStore((x) => x.loggedIn);
   const lingots = useBoundStore((x) => x.lingots);
-  const streak = useBoundStore((x) => x.streak);
+  const streak = useBoundStore((x) => x.streak());
   const language = useBoundStore((x) => x.language);
   const lessonsCompleted = useBoundStore((x) => x.lessonsCompleted);
 
