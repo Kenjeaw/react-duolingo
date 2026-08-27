@@ -19,7 +19,7 @@ export const LeftBar = ({ selectedTab }: { selectedTab: Tab | null }) => {
 
   return (
     <>
-      <nav className="fixed bottom-0 left-0 top-0 z-30 hidden flex-col gap-5 border-r-2 border-divider bg-white p-3 md:flex lg:w-64 lg:p-5">
+      <nav className="fixed bottom-0 left-0 top-0 z-nav hidden flex-col gap-5 border-r-2 border-divider bg-white p-3 md:flex lg:w-64 lg:p-5">
         <Link
           href="/learn"
           className="mb-5 ml-5 mt-5 hidden text-3xl font-bold text-brand lg:block"
@@ -63,7 +63,7 @@ export const LeftBar = ({ selectedTab }: { selectedTab: Tab | null }) => {
             <span className="hidden text-sm lg:inline">More</span>
             <div
               className={[
-                "absolute left-full top-[-10px] z-50 min-w-[300px] rounded-2xl border-2 border-divider-strong bg-white text-left text-gray-400",
+                "absolute left-full top-[-10px] z-popover min-w-[300px] rounded-2xl border-2 border-divider-strong bg-white text-left text-gray-400",
                 moreMenuShown ? "" : "hidden",
               ].join(" ")}
             >

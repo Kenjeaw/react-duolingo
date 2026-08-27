@@ -16,6 +16,27 @@ export default {
         /** BottomBar: an 88px row plus its 2px top border. Hidden from `md`. */
         "bottom-bar": "90px",
       },
+      /**
+       * The app's stacking order, named so a call site says what layer it is
+       * on rather than picking a number and hoping. Anything that overlaps
+       * something else belongs on one of these; raw `z-*` numbers do not.
+       *
+       * Ordering, lowest first: content that floats over the page, then the
+       * fixed bars, then LeftBar (whose flyout escapes over the bars), then a
+       * modal's scrim and the modal itself.
+       *
+       * A value only ranks an element against others in the same stacking
+       * context, so a popover nested inside `nav` competes with its siblings,
+       * not with `modal`. Nesting is why `popover` is both the lowest layer
+       * and the right choice for a menu inside LeftBar.
+       */
+      zIndex: {
+        popover: "10",
+        chrome: "20",
+        nav: "30",
+        scrim: "40",
+        modal: "50",
+      },
       colors: {
         /**
          * The app's one green. Every green surface is a step on this ramp:

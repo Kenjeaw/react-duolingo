@@ -39,7 +39,7 @@ export default Profile;
 
 const ProfileTopBar = () => {
   return (
-    <div className="fixed left-0 right-0 top-0 z-20 flex h-top-bar items-center justify-between border-b-2 border-divider bg-white px-5 text-xl font-bold text-gray-300 md:hidden">
+    <div className="fixed left-0 right-0 top-0 z-chrome flex h-top-bar items-center justify-between border-b-2 border-divider bg-white px-5 text-xl font-bold text-gray-300 md:hidden">
       <div className="invisible" aria-hidden={true}>
         <SettingsGearSvg />
       </div>

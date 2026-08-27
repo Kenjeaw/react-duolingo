@@ -250,7 +250,7 @@ const TileTooltip = ({
     >
       <div
         className={[
-          "absolute z-20 flex w-[300px] flex-col gap-4 rounded-xl p-4 font-bold transition-all duration-300",
+          "absolute left-1/2 z-popover flex w-[300px] -translate-x-1/2 flex-col gap-4 rounded-xl p-4 font-bold transition-all duration-300",
           status === "ACTIVE"
             ? activeBackgroundColor
             : status === "LOCKED"
@@ -258,7 +258,6 @@ const TileTooltip = ({
               : "bg-yellow-400",
           index === selectedTile ? "top-4 scale-100" : "-top-14 scale-0",
         ].join(" ")}
-        style={{ left: "calc(50% - 150px)" }}
       >
         <div
           className={[
@@ -627,6 +626,11 @@ const HoverLabel = ({
     if (!element) return;
     // A ref is not reactive, so this measures on mount and then whenever the
     // label actually resizes - a late-loading font being the usual cause.
+    //
+    // The obvious simplification - `left-1/2 -translate-x-1/2`, which centres
+    // any width without measuring - does not work here: `animate-bounce`'s
+    // keyframes set `transform` outright, so they overwrite the translate on
+    // every frame. Centring has to go through `left` while the label bounces.
     const observer = new ResizeObserver(() => setWidth(element.clientWidth));
     observer.observe(element);
     setWidth(element.clientWidth);
@@ -635,7 +639,7 @@ const HoverLabel = ({
 
   return (
     <div
-      className={`absolute z-10 w-max animate-bounce rounded-lg border-2 border-divider-strong bg-white px-3 py-2 font-bold uppercase ${textColor}`}
+      className={`absolute z-popover w-max animate-bounce rounded-xl border-2 border-divider-strong bg-white px-3 py-2 font-bold uppercase ${textColor}`}
       style={{
         top: "-25%",
         left: `calc(50% - ${width / 2}px)`,
@@ -643,10 +647,7 @@ const HoverLabel = ({
       ref={hoverElement}
     >
       {text}
-      <div
-        className="absolute h-3 w-3 rotate-45 border-b-2 border-r-2 border-divider-strong bg-white"
-        style={{ left: "calc(50% - 8px)", bottom: "-8px" }}
-      ></div>
+      <div className="absolute -bottom-2 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 border-b-2 border-r-2 border-divider-strong bg-white"></div>
     </div>
   );
 };

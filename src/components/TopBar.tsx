@@ -47,7 +47,7 @@ export const TopBar = ({
   }, [menu]);
 
   return (
-    <header className="fixed z-20 h-top-bar w-full">
+    <header className="fixed z-chrome h-top-bar w-full">
       <div
         className={`relative flex h-full w-full items-center justify-between border-b-2 px-[10px] transition duration-500 sm:hidden ${borderColor} ${backgroundColor}`}
       >

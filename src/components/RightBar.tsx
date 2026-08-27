@@ -52,12 +52,10 @@ export const RightBar = () => {
             <Flag language={language} width={45} />
             <div>{language.name}</div>
             <div
-              className="absolute top-full z-10 rounded-2xl border-2 border-divider-strong bg-white"
-              style={{
-                left: "calc(50% - 150px)",
-                width: 300,
-                display: languagesShown ? "block" : "none",
-              }}
+              className={[
+                "absolute left-1/2 top-full z-popover w-[300px] -translate-x-1/2 rounded-2xl border-2 border-divider-strong bg-white",
+                languagesShown ? "" : "hidden",
+              ].join(" ")}
             >
               <h2 className="px-5 py-3 font-bold uppercase text-gray-400">
                 My courses
@@ -70,7 +68,7 @@ export const RightBar = () => {
                 className="flex w-full items-center gap-3 rounded-b-2xl border-t-2 border-divider-strong px-5 py-3 text-left font-bold hover:bg-gray-100"
                 href="/register"
               >
-                <span className="flex items-center justify-center rounded-lg border-2 border-gray-400 px-2 text-lg font-bold text-gray-400">
+                <span className="flex items-center justify-center rounded-xl border-2 border-gray-400 px-2 text-lg font-bold text-gray-400">
                   +
                 </span>
                 <span className="text-gray-600">Add new course</span>
@@ -103,12 +101,10 @@ export const RightBar = () => {
               {streak}
             </span>
             <div
-              className="absolute top-full z-10 flex flex-col gap-5 rounded-2xl border-2 border-divider-strong bg-white p-5 text-black"
-              style={{
-                left: "calc(50% - 200px)",
-                width: 400,
-                display: streakShown ? "flex" : "none",
-              }}
+              className={[
+                "absolute left-1/2 top-full z-popover flex w-[400px] -translate-x-1/2 flex-col gap-5 rounded-2xl border-2 border-divider-strong bg-white p-5 text-black",
+                streakShown ? "" : "hidden",
+              ].join(" ")}
             >
               <h2 className="text-center text-lg font-bold">Streak</h2>
               <p className="text-center text-sm font-normal text-gray-400">
@@ -131,11 +127,10 @@ export const RightBar = () => {
               {lingots}
             </span>
             <div
-              className="absolute top-full z-10 flex w-72 items-center gap-3 rounded-2xl border-2 border-divider-strong bg-white p-5"
-              style={{
-                left: "calc(50% - 150px)",
-                display: gemsShown ? "flex" : "none",
-              }}
+              className={[
+                "absolute left-1/2 top-full z-popover flex w-72 -translate-x-1/2 items-center gap-3 rounded-2xl border-2 border-divider-strong bg-white p-5",
+                gemsShown ? "" : "hidden",
+              ].join(" ")}
             >
               <LingotsTreasureChestSvg className="w-24" />
               <div className="flex flex-col gap-3">

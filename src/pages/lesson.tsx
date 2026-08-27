@@ -377,8 +377,8 @@ const QuitMessage = ({
       <div
         className={
           quitMessageShown
-            ? "fixed bottom-0 left-0 right-0 top-0 z-30 bg-black bg-opacity-60 transition-all duration-300"
-            : "pointer-events-none fixed bottom-0 left-0 right-0 top-0 z-30 bg-black bg-opacity-0 transition-all duration-300"
+            ? "fixed bottom-0 left-0 right-0 top-0 z-scrim bg-black bg-opacity-60 transition-all duration-300"
+            : "pointer-events-none fixed bottom-0 left-0 right-0 top-0 z-scrim bg-black bg-opacity-0 transition-all duration-300"
         }
         onClick={() => setQuitMessageShown(false)}
         aria-hidden={true}
@@ -387,8 +387,8 @@ const QuitMessage = ({
       <article
         className={
           quitMessageShown
-            ? "fixed bottom-0 left-0 right-0 z-40 flex flex-col gap-4 bg-white px-5 py-12 text-center transition-all duration-300 sm:flex-row"
-            : "fixed -bottom-96 left-0 right-0 z-40 flex flex-col bg-white px-5 py-12 text-center transition-all duration-300 sm:flex-row"
+            ? "fixed bottom-0 left-0 right-0 z-modal flex flex-col gap-4 bg-white px-5 py-12 text-center transition-all duration-300 sm:flex-row"
+            : "fixed -bottom-96 left-0 right-0 z-modal flex flex-col bg-white px-5 py-12 text-center transition-all duration-300 sm:flex-row"
         }
         aria-hidden={!quitMessageShown}
       >
@@ -835,11 +835,8 @@ const ReviewLesson = ({
                 </div>
                 <div>{questionResult.yourResponse}</div>
                 {selectedQuestionResult === questionResult && (
-                  <div className="absolute left-1 right-1 top-20 z-10 rounded-2xl border-2 border-divider-strong bg-white p-3 text-sm tracking-tighter">
-                    <div
-                      className="absolute -top-2 h-3 w-3 rotate-45 border-l-2 border-t-2 border-divider-strong bg-white"
-                      style={{ left: "calc(50% - 6px)" }}
-                    ></div>
+                  <div className="absolute left-1 right-1 top-20 z-popover rounded-2xl border-2 border-divider-strong bg-white p-3 text-sm tracking-tighter">
+                    <div className="absolute -top-2 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 border-l-2 border-t-2 border-divider-strong bg-white"></div>
                     <div className="font-bold uppercase text-gray-400">
                       Your response:
                     </div>

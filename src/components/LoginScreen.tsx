@@ -154,7 +154,7 @@ const LoginScreen = ({
   return (
     <article
       className={[
-        "fixed inset-0 z-30 flex flex-col bg-white p-7 transition-[opacity,visibility] duration-300",
+        "fixed inset-0 z-modal flex flex-col bg-white p-7 transition-[opacity,visibility] duration-300",
         loginScreenState === "HIDDEN"
           ? "pointer-events-none invisible opacity-0"
           : "visible opacity-100",
@@ -206,7 +206,7 @@ const LoginScreen = ({
                     >
                       ?
                       {ageTooltipShown && (
-                        <div className="absolute -right-5 top-full z-10 w-72 rounded-2xl border-2 border-divider bg-white p-4 text-center text-xs leading-5 text-gray-800">
+                        <div className="absolute -right-5 top-full z-popover w-72 rounded-2xl border-2 border-divider bg-white p-4 text-center text-xs leading-5 text-gray-800">
                           Providing your age ensures you get the right Duolingo
                           experience. For more details, please visit our Privacy
                           Policy.
