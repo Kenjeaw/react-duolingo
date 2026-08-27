@@ -4,6 +4,18 @@ export default {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      /**
+       * The two fixed bars, so the pages that have to leave room for them
+       * cannot drift from the bars' real heights. `PageLayout` is the only
+       * thing that should need these; the bars themselves set their own
+       * height from the same token.
+       */
+      spacing: {
+        /** TopBar. Mobile-only: the bar inside it is `sm:hidden`. */
+        "top-bar": "58px",
+        /** BottomBar: an 88px row plus its 2px top border. Hidden from `md`. */
+        "bottom-bar": "90px",
+      },
       colors: {
         /**
          * The app's one green. Every green surface is a step on this ramp:

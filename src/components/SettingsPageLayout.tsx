@@ -1,14 +1,13 @@
 import React from "react";
-import { BottomBar } from "./BottomBar";
 import { Button } from "./Button";
-import { LeftBar } from "./LeftBar";
-import { TopBar } from "./TopBar";
+import { PageLayout } from "./PageLayout";
 import type { SettingsTitle } from "./SettingsRightNav";
 import { SettingsRightNav } from "./SettingsRightNav";
 
 /**
- * The chrome shared by every page under `/settings`: the app nav, the heading
- * row with its save button, and the settings side nav.
+ * The chrome shared by every page under `/settings`: the app nav (via
+ * `PageLayout`, so the offsets match every other page), the heading row with
+ * its save button, and the settings side nav.
  *
  * `title` drives both the heading and the highlighted entry in the side nav —
  * they are always the same string, so passing it once keeps them from drifting.
@@ -29,11 +28,13 @@ export const SettingsPageLayout = ({
   children: React.ReactNode;
 }) => {
   return (
-    <div>
-      <TopBar />
-      <LeftBar selectedTab={null} />
-      <BottomBar selectedTab={null} />
-      <div className="mx-auto flex flex-col gap-5 px-4 py-20 sm:py-10 md:pl-28 lg:pl-72">
+    <PageLayout selectedTab={null}>
+      {/*
+        Settings is the one page whose heading row spans the content column and
+        the side nav together, so both live inside `PageLayout`'s main column
+        rather than being passed as its `rightColumn`.
+      */}
+      <div className="flex w-full flex-col gap-5 px-4">
         <div className="mx-auto flex w-full max-w-xl items-center justify-between lg:max-w-4xl">
           <h1 className="text-lg font-bold text-gray-800 sm:text-2xl">
             {title}
@@ -47,6 +48,6 @@ export const SettingsPageLayout = ({
           <SettingsRightNav selectedTab={title} />
         </div>
       </div>
-    </div>
+    </PageLayout>
   );
 };

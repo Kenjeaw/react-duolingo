@@ -1,6 +1,5 @@
 import type { NextPage } from "next";
-import { BottomBar } from "~/components/BottomBar";
-import { LeftBar } from "~/components/LeftBar";
+import { PageLayout } from "~/components/PageLayout";
 import { ButtonLink } from "~/components/Button";
 import { BronzeLeagueSvg, EmptyMedalSvg } from "~/components/svgs/leaderboard";
 import {
@@ -22,19 +21,17 @@ import { useRouter } from "next/router";
 
 const Profile: NextPage = () => {
   return (
-    <div>
-      <ProfileTopBar />
-      <LeftBar selectedTab="Profile" />
-      <div className="flex justify-center gap-3 pt-14 md:ml-24 lg:ml-64 lg:gap-12">
-        <div className="flex w-full max-w-4xl flex-col gap-5 p-5">
-          <ProfileTopSection />
-          <ProfileStatsSection />
-          <ProfileFriendsSection />
-        </div>
+    <PageLayout
+      selectedTab="Profile"
+      topBar={<ProfileTopBar />}
+      topBarUntil="md"
+    >
+      <div className="flex w-full max-w-4xl flex-col gap-5 p-5">
+        <ProfileTopSection />
+        <ProfileStatsSection />
+        <ProfileFriendsSection />
       </div>
-      <div className="pt-[90px]"></div>
-      <BottomBar selectedTab="Profile" />
-    </div>
+    </PageLayout>
   );
 };
 
@@ -42,7 +39,7 @@ export default Profile;
 
 const ProfileTopBar = () => {
   return (
-    <div className="fixed left-0 right-0 top-0 flex h-16 items-center justify-between border-b-2 border-divider bg-white px-5 text-xl font-bold text-gray-300 md:hidden">
+    <div className="fixed left-0 right-0 top-0 z-20 flex h-top-bar items-center justify-between border-b-2 border-divider bg-white px-5 text-xl font-bold text-gray-300 md:hidden">
       <div className="invisible" aria-hidden={true}>
         <SettingsGearSvg />
       </div>

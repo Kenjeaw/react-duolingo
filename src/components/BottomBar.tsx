@@ -163,8 +163,8 @@ export const useBottomBarItems = () => {
 export const BottomBar = ({ selectedTab }: { selectedTab: Tab | null }) => {
   const bottomBarItems = useBottomBarItems();
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-20 border-t-2 border-divider bg-white md:hidden">
-      <ul className="flex h-[88px]">
+    <nav className="fixed bottom-0 left-0 right-0 z-20 h-bottom-bar border-t-2 border-divider bg-white md:hidden">
+      <ul className="flex h-full">
         {bottomBarItems.map((item) => {
           return (
             <li

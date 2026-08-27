@@ -1,7 +1,6 @@
 import type { NextPage } from "next";
 import React, { useEffect } from "react";
-import { LeftBar } from "~/components/LeftBar";
-import { BottomBar } from "~/components/BottomBar";
+import { PageLayout } from "~/components/PageLayout";
 import { ButtonLink } from "~/components/Button";
 import { useBoundStore } from "~/hooks/useBoundStore";
 import {
@@ -136,74 +135,72 @@ const Leaderboard: NextPage = () => {
   const leaderboardUsers = useLeaderboardUsers();
 
   return (
-    <div>
-      <LeftBar selectedTab="Leaderboards" />
-      <div className="flex justify-center gap-3 pt-14 md:ml-24 md:p-6 md:pt-10 lg:ml-64 lg:gap-12">
-        <div className="flex w-full max-w-xl flex-col items-center gap-5 pb-28 md:px-5">
-          {!leaderboardIsUnlocked && (
-            <>
-              <LeaderboardBannerSvg />
-              <h1 className="text-center text-2xl font-bold text-gray-700">
-                Unlock Leaderboards!
-              </h1>
-              <p className="text-center text-lg text-gray-500">
-                Complete {lessonsRemainingToUnlockLeaderboard} more lesson
-                {lessonsRemainingToUnlockLeaderboard === 1 ? "" : "s"} to start
-                competing
-              </p>
-              <ButtonLink
-                variant="secondaryAccent"
-                size="none"
-                className="w-fit px-16 py-2 text-center"
-                href="/lesson?practice"
-              >
-                Start a lesson
-              </ButtonLink>
-              <div className="h-5"></div>
-              <LockedLeaderboardSvg />
-            </>
-          )}
-          {leaderboardIsUnlocked && (
-            <>
-              <div className="sticky top-0 -mt-14 flex w-full flex-col items-center gap-5 bg-white pt-14">
-                <div className="flex items-center gap-5">
-                  <BronzeLeagueSvg className="h-fit w-20" />
-                  <LockedLeagueSvg />
-                  <LockedLeagueSvg />
-                  <LockedLeagueSvg />
-                  <LockedLeagueSvg />
-                </div>
-                <h1 className="text-2xl font-bold">{leaderboardLeague}</h1>
-                <div className="flex w-full flex-col items-center gap-1 pb-5">
-                  <p className="text-lg text-gray-500">
-                    Top 20 advance to the next league
-                  </p>
-                  <time className="font-bold text-yellow-400">
-                    {timeLeft()}
-                  </time>
-                </div>
-                <div className="w-full border-b-2 border-divider"></div>
+    <PageLayout
+      selectedTab="Leaderboards"
+      rightColumn={
+        !leaderboardIsUnlocked ? <LeaderboardExplanationSection /> : undefined
+      }
+    >
+      <div className="flex w-full max-w-xl flex-col items-center gap-5 md:px-5">
+        {!leaderboardIsUnlocked && (
+          <>
+            <LeaderboardBannerSvg />
+            <h1 className="text-center text-2xl font-bold text-gray-700">
+              Unlock Leaderboards!
+            </h1>
+            <p className="text-center text-lg text-gray-500">
+              Complete {lessonsRemainingToUnlockLeaderboard} more lesson
+              {lessonsRemainingToUnlockLeaderboard === 1 ? "" : "s"} to start
+              competing
+            </p>
+            <ButtonLink
+              variant="secondaryAccent"
+              size="none"
+              className="w-fit px-16 py-2 text-center"
+              href="/lesson?practice"
+            >
+              Start a lesson
+            </ButtonLink>
+            <div className="h-5"></div>
+            <LockedLeaderboardSvg />
+          </>
+        )}
+        {leaderboardIsUnlocked && (
+          <>
+            <div className="sticky top-top-bar -mt-top-bar flex w-full flex-col items-center gap-5 bg-white pt-top-bar sm:top-0">
+              <div className="flex items-center gap-5">
+                <BronzeLeagueSvg className="h-fit w-20" />
+                <LockedLeagueSvg />
+                <LockedLeagueSvg />
+                <LockedLeagueSvg />
+                <LockedLeagueSvg />
               </div>
-              <div className="w-full">
-                {leaderboardUsers.map((user, i) => {
-                  return (
-                    <LeaderboardProfile
-                      key={user.name}
-                      place={i + 1}
-                      name={user.name}
-                      xp={user.xp}
-                      isCurrentUser={user.isCurrentUser}
-                    />
-                  );
-                })}
+              <h1 className="text-2xl font-bold">{leaderboardLeague}</h1>
+              <div className="flex w-full flex-col items-center gap-1 pb-5">
+                <p className="text-lg text-gray-500">
+                  Top 20 advance to the next league
+                </p>
+                <time className="font-bold text-yellow-400">{timeLeft()}</time>
               </div>
-            </>
-          )}
-        </div>
-        {!leaderboardIsUnlocked && <LeaderboardExplanationSection />}
+              <div className="w-full border-b-2 border-divider"></div>
+            </div>
+            <div className="w-full">
+              {leaderboardUsers.map((user, i) => {
+                return (
+                  <LeaderboardProfile
+                    key={user.name}
+                    place={i + 1}
+                    name={user.name}
+                    xp={user.xp}
+                    isCurrentUser={user.isCurrentUser}
+                  />
+                );
+              })}
+            </div>
+          </>
+        )}
       </div>
-      <BottomBar selectedTab="Leaderboards" />
-    </div>
+    </PageLayout>
   );
 };
 

@@ -17,6 +17,13 @@ import {
 
 type MenuState = "HIDDEN" | "LANGUAGES" | "STREAK" | "GEMS" | "MORE";
 
+/**
+ * Height of the bar in pixels, for the code that has to reason about it in JS
+ * rather than in classes. Kept beside the `h-top-bar` below so the two cannot
+ * drift; both resolve to the `top-bar` spacing token.
+ */
+export const topBarHeight = 58;
+
 export const TopBar = ({
   backgroundColor = "bg-brand",
   borderColor = "border-brand-dark",
@@ -40,7 +47,7 @@ export const TopBar = ({
   }, [menu]);
 
   return (
-    <header className="fixed z-20 h-[58px] w-full">
+    <header className="fixed z-20 h-top-bar w-full">
       <div
         className={`relative flex h-full w-full items-center justify-between border-b-2 px-[10px] transition duration-500 sm:hidden ${borderColor} ${backgroundColor}`}
       >
