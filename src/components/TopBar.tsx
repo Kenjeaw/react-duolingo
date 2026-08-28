@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useBoundStore } from "~/hooks/useBoundStore";
+import { useClientNow } from "~/hooks/useClientNow";
 import { Calendar } from "./Calendar";
 import { Flag } from "./Flag";
 import { AddLanguageSvg } from "./svgs/icons";
@@ -32,7 +33,7 @@ export const TopBar = ({
   borderColor?: `border-${string}`;
 }) => {
   const [menu, setMenu] = useState<MenuState>("HIDDEN");
-  const [now, setNow] = useState(dayjs());
+  const [now, setNow] = useClientNow();
   const streak = useBoundStore((x) => x.streak());
   const lingots = useBoundStore((x) => x.lingots);
   const language = useBoundStore((x) => x.language);
@@ -62,7 +63,12 @@ export const TopBar = ({
 
         <button
           className="flex items-center gap-2 font-bold text-white"
-          onClick={() => setMenu((x) => (x === "STREAK" ? "HIDDEN" : "STREAK"))}
+          onClick={() => {
+            setMenu((x) => (x === "STREAK" ? "HIDDEN" : "STREAK"));
+            // Re-read on every toggle, so the calendar opens on the current
+            // month rather than wherever the reader last paged it to.
+            setNow(dayjs());
+          }}
           aria-label="Toggle streak menu"
         >
           {streak > 0 ? <FireSvg /> : <EmptyFireTopBarSvg />}{" "}
@@ -127,7 +133,7 @@ export const TopBar = ({
                       {`Practice each day so your streak won't reset!`}
                     </p>
                     <div className="self-stretch">
-                      <Calendar now={now} setNow={setNow} />
+                      {now && <Calendar now={now} setNow={setNow} />}
                     </div>
                   </div>
                 );

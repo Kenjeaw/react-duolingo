@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import dayjs from "dayjs";
+import { useClientNow } from "~/hooks/useClientNow";
 import { BronzeLeagueSvg } from "./svgs/leaderboard";
 import {
   EmptyFireSvg,
@@ -32,7 +33,7 @@ export const RightBar = () => {
   const [languagesShown, setLanguagesShown] = useState(false);
 
   const [streakShown, setStreakShown] = useState(false);
-  const [now, setNow] = useState(dayjs());
+  const [now, setNow] = useClientNow();
 
   const [gemsShown, setGemsShown] = useState(false);
 
@@ -77,7 +78,12 @@ export const RightBar = () => {
           </div>
           <span
             className="relative flex items-center gap-2 rounded-xl p-3 font-bold text-orange-500 hover:bg-gray-100"
-            onMouseEnter={() => setStreakShown(true)}
+            onMouseEnter={() => {
+              setStreakShown(true);
+              // Hover reveals the calendar just as the click does, so it has to
+              // stamp the date too — otherwise it renders with none at all.
+              setNow(dayjs());
+            }}
             onMouseLeave={() => {
               setStreakShown(false);
               setNow(dayjs());
@@ -110,7 +116,7 @@ export const RightBar = () => {
               <p className="text-center text-sm font-normal text-gray-400">
                 {`But your streak will reset tomorrow if you don't practice tomorrow. Watch out!`}
               </p>
-              <Calendar now={now} setNow={setNow} />
+              {now && <Calendar now={now} setNow={setNow} />}
             </div>
           </span>
           <span

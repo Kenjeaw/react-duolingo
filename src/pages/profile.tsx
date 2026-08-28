@@ -57,7 +57,7 @@ const ProfileTopSection = () => {
   const loggedIn = useBoundStore((x) => x.loggedIn);
   const name = useBoundStore((x) => x.name);
   const username = useBoundStore((x) => x.username);
-  const joinedAt = useBoundStore((x) => x.joinedAt).format("MMMM YYYY");
+  const joinedAt = useBoundStore((x) => x.joinedAt);
   const followingCount = 0;
   const followersCount = 0;
   const language = useBoundStore((x) => x.language);
@@ -79,10 +79,17 @@ const ProfileTopSection = () => {
             <h1 className="text-2xl font-bold">{name}</h1>
             <div className="text-sm text-gray-400">{username}</div>
           </div>
-          <div className="flex items-center gap-3">
-            <ProfileTimeJoinedSvg />
-            <span className="text-gray-500">{`Joined ${joinedAt}`}</span>
-          </div>
+          {/*
+            Absent until the reader has signed in — and this page redirects
+            them away if they have not, so in practice it is only missing for
+            the frame before that redirect and in the prerendered HTML.
+          */}
+          {joinedAt && (
+            <div className="flex items-center gap-3">
+              <ProfileTimeJoinedSvg />
+              <span className="text-gray-500">{`Joined ${joinedAt.format("MMMM YYYY")}`}</span>
+            </div>
+          )}
           <div className="flex items-center gap-3">
             <ProfileFriendsSvg />
             <span className="text-gray-500">{`${followingCount} Following / ${followersCount} Followers`}</span>

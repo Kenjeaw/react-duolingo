@@ -30,19 +30,26 @@ export const Calendar = ({
   now,
   setNow,
 }: {
+  /** The month on display. Callers hold this as client-only state. */
   now: dayjs.Dayjs;
-  setNow: React.Dispatch<React.SetStateAction<dayjs.Dayjs>>;
+  setNow: React.Dispatch<React.SetStateAction<dayjs.Dayjs | null>>;
 }) => {
   const isActiveDay = useBoundStore((x) => x.isActiveDay);
   const formattedNowMonth = now.format("MMMM YYYY");
-  const staticNow = dayjs();
+  // Safe to read the clock during render: `now` comes from `useClientNow`, so
+  // every caller has already gated this component behind a mounted, non-null
+  // date and it never renders during the build's prerender. Keep it that way —
+  // rendering a calendar from a server-side `dayjs()` bakes the build date into
+  // the HTML. `now` is the month being browsed, which is not today once the
+  // reader pages away, so the two cannot be collapsed into one value.
+  const today = dayjs();
   const calendarDays = getCalendarDays(now);
   return (
     <article className="flex flex-col rounded-xl border-2 border-divider-strong p-3 text-gray-400">
       <header className="flex items-center justify-between gap-3">
         <button
           className="text-gray-400"
-          onClick={() => setNow((now) => now.add(-1, "month"))}
+          onClick={() => setNow((now) => now?.add(-1, "month") ?? null)}
         >
           <ChevronLeftSvg />
           <span className="sr-only">Go to previous month</span>
@@ -52,7 +59,7 @@ export const Calendar = ({
         </h3>
         <button
           className="text-gray-400"
-          onClick={() => setNow((now) => now.add(1, "month"))}
+          onClick={() => setNow((now) => now?.add(1, "month") ?? null)}
         >
           <ChevronRightSvg />
           <span className="sr-only">Go to next month</span>
@@ -75,9 +82,9 @@ export const Calendar = ({
                 const isActiveDate =
                   date !== null && isActiveDay(now.date(date));
                 const isCurrentDate =
-                  date === staticNow.date() &&
-                  now.month() === staticNow.month() &&
-                  now.year() === staticNow.year();
+                  date === today.date() &&
+                  now.month() === today.month() &&
+                  now.year() === today.year();
                 return (
                   <div
                     key={i}
