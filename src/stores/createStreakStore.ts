@@ -14,8 +14,13 @@ const isActiveDay = (activeDays: ActiveDays, day: dayjs.Dayjs): boolean => {
 };
 
 const getCurrentStreak = (activeDays: ActiveDays): number => {
+  const today = dayjs();
+  // Today extends a streak but cannot break one: a day the reader still has
+  // time left in is not yet a missed day. So the walk starts at today only
+  // once today is active, and at yesterday otherwise — which leaves a streak
+  // standing all day and drops it at the midnight that ends an unused day.
+  let day = isActiveDay(activeDays, today) ? today : today.add(-1, "day");
   let daysBack = 0;
-  let day = dayjs();
   while (isActiveDay(activeDays, day)) {
     day = day.add(-1, "day");
     daysBack += 1;
@@ -26,6 +31,10 @@ const getCurrentStreak = (activeDays: ActiveDays): number => {
 export type StreakSlice = {
   activeDays: ActiveDays;
   /**
+   * Consecutive active days up to and including today, where today counts as
+   * active-in-waiting: an unfinished today leaves the streak at its length
+   * rather than zeroing it. See `getCurrentStreak`.
+   *
    * Derived from `activeDays` on every read rather than stored, so a streak the
    * reader has already broken cannot keep showing its old length. A stored
    * number is only recomputed when a lesson ends, which leaves it wrong for
