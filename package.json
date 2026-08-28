@@ -18,22 +18,22 @@
     "zustand": "^5"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
     "@types/eslint": "^8.56.2",
     "@types/node": "^22.5.5",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.5",
     "@typescript-eslint/eslint-plugin": "^8.68.0",
     "@typescript-eslint/parser": "^8.68.0",
-    "autoprefixer": "^10.4.16",
     "eslint": "^9",
     "eslint-config-next": "^16.3.3",
     "postcss": "^8.4.47",
-    "prettier": "^3.3.3",
-    "prettier-plugin-tailwindcss": "^0.6.6",
-    "tailwindcss": "^3.4.11",
+    "prettier": "^3.9.6",
+    "prettier-plugin-tailwindcss": "^0.8.1",
+    "repomix": "^1.18.0",
+    "tailwindcss": "^4.3.3",
     "typescript": "^5",
-    "typescript-eslint": "^8.68.0",
-    "repomix": "^1.18.0"
+    "typescript-eslint": "^8.68.0"
   },
   "ct3aMetadata": {
     "initVersion": "7.13.0"

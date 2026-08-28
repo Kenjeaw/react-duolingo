@@ -152,7 +152,7 @@ const LeaderboardProfile = ({
         )}
         <LeaderboardAvatar name={name} />
       </div>
-      <div className="grow overflow-hidden overflow-ellipsis font-bold">
+      <div className="grow overflow-hidden text-ellipsis font-bold">
         {name}
       </div>
       <div className="shrink-0 text-gray-500">{`${xp} XP`}</div>
