@@ -1,9 +1,8 @@
 import type { NextPage } from "next";
 import React, { useEffect } from "react";
-import { LeftBar } from "~/components/LeftBar";
-import { BottomBar } from "~/components/BottomBar";
+import { PageLayout } from "~/components/PageLayout";
+import { ButtonLink } from "~/components/Button";
 import { useBoundStore } from "~/hooks/useBoundStore";
-import Link from "next/link";
 import {
   BronzeLeagueSvg,
   FirstPlaceSvg,
@@ -13,15 +12,15 @@ import {
   LockedLeagueSvg,
   SecondPlaceSvg,
   ThirdPlaceSvg,
-} from "~/components/Svgs";
+} from "~/components/svgs/leaderboard";
 import dayjs from "dayjs";
 import { useRouter } from "next/router";
 import { useLeaderboardUsers } from "~/hooks/useLeaderboard";
-import Image from "next/image";
+import { lessonsToUnlockLeaderboard } from "~/utils/constants";
 
 const LeaderboardExplanationSection = () => {
   return (
-    <article className="relative hidden h-fit w-96 shrink-0 gap-5 rounded-2xl border-2 border-gray-200 p-6 xl:flex">
+    <article className="relative hidden h-fit w-96 shrink-0 gap-5 rounded-2xl border-2 border-divider p-6 xl:flex">
       <div className="flex flex-col gap-5">
         <h2 className="font-bold uppercase text-gray-400">
           What are leaderboards?
@@ -66,7 +65,60 @@ const timeLeft = (): `${number} ${TimeLeftUnit}` => {
   return `${timeUntilStartOfWeek("minutes")} minutes`;
 };
 
-const defaultPicture = "https://placekitten.com/100/100";
+/**
+ * Avatar fills, drawn from the palette the rest of the app already uses. Every
+ * one is written out in full: Tailwind finds class names by scanning the source
+ * text, so a class assembled at runtime is never generated.
+ */
+const avatarColors = [
+  "bg-brand",
+  "bg-unit-purple",
+  "bg-unit-teal",
+  "bg-marketing",
+  "bg-blue-400",
+  "bg-orange-400",
+  "bg-red-500",
+  "bg-yellow-400",
+] as const;
+
+/**
+ * A stable fill for a name, so a reader keeps the same avatar between renders
+ * and between sessions. Any spread-out mapping would do — this one only has to
+ * be deterministic, not unguessable.
+ */
+const avatarColor = (name: string): string => {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = (hash * 31 + name.charCodeAt(i)) | 0;
+  }
+  return avatarColors[Math.abs(hash) % avatarColors.length] ?? avatarColors[0];
+};
+
+/**
+ * The reader's initial on a coloured disc, matching how `/profile` stands in
+ * for a missing profile picture.
+ *
+ * This deliberately draws rather than fetches. The avatars here used to come
+ * from a placeholder image host, which has since gone off the air and took
+ * every row's picture with it — an avatar is chrome, and chrome should not be
+ * able to break because someone else's server did.
+ *
+ * Hidden from assistive tech: it encodes the first letter of the name that is
+ * already sitting next to it as text.
+ */
+const LeaderboardAvatar = ({ name }: { name: string }) => {
+  return (
+    <div
+      className={[
+        "flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-xl font-bold text-white",
+        avatarColor(name),
+      ].join(" ")}
+      aria-hidden={true}
+    >
+      {name.charAt(0).toUpperCase()}
+    </div>
+  );
+};
 
 const LeaderboardProfile = ({
   place,
@@ -98,15 +150,9 @@ const LeaderboardProfile = ({
             {place}
           </div>
         )}
-        <Image
-          width={48}
-          height={48}
-          className="h-12 w-12 rounded-full"
-          src={defaultPicture}
-          alt=""
-        />
+        <LeaderboardAvatar name={name} />
       </div>
-      <div className="grow overflow-hidden overflow-ellipsis font-bold">
+      <div className="grow overflow-hidden text-ellipsis font-bold">
         {name}
       </div>
       <div className="shrink-0 text-gray-500">{`${xp} XP`}</div>
@@ -126,7 +172,6 @@ const Leaderboard: NextPage = () => {
     }
   }, [loggedIn, router]);
 
-  const lessonsToUnlockLeaderboard = 10;
   const lessonsRemainingToUnlockLeaderboard =
     lessonsToUnlockLeaderboard - lessonsCompleted;
   const leaderboardIsUnlocked = lessonsCompleted >= lessonsToUnlockLeaderboard;
@@ -136,72 +181,72 @@ const Leaderboard: NextPage = () => {
   const leaderboardUsers = useLeaderboardUsers();
 
   return (
-    <div>
-      <LeftBar selectedTab="Leaderboards" />
-      <div className="flex justify-center gap-3 pt-14 md:ml-24 md:p-6 md:pt-10 lg:ml-64 lg:gap-12">
-        <div className="flex w-full max-w-xl flex-col items-center gap-5 pb-28 md:px-5">
-          {!leaderboardIsUnlocked && (
-            <>
-              <LeaderboardBannerSvg />
-              <h1 className="text-center text-2xl font-bold text-gray-700">
-                Unlock Leaderboards!
-              </h1>
-              <p className="text-center text-lg text-gray-500">
-                Complete {lessonsRemainingToUnlockLeaderboard} more lesson
-                {lessonsRemainingToUnlockLeaderboard === 1 ? "" : "s"} to start
-                competing
-              </p>
-              <Link
-                href="/lesson?practice"
-                className="w-fit rounded-2xl border-2 border-b-4 border-gray-200 px-16 py-2 text-center font-bold uppercase text-blue-400 transition hover:bg-gray-50 hover:brightness-90"
-              >
-                Start a lesson
-              </Link>
-              <div className="h-5"></div>
-              <LockedLeaderboardSvg />
-            </>
-          )}
-          {leaderboardIsUnlocked && (
-            <>
-              <div className="sticky top-0 -mt-14 flex w-full flex-col items-center gap-5 bg-white pt-14">
-                <div className="flex items-center gap-5">
-                  <BronzeLeagueSvg className="h-fit w-20" />
-                  <LockedLeagueSvg />
-                  <LockedLeagueSvg />
-                  <LockedLeagueSvg />
-                  <LockedLeagueSvg />
-                </div>
-                <h1 className="text-2xl font-bold">{leaderboardLeague}</h1>
-                <div className="flex w-full flex-col items-center gap-1 pb-5">
-                  <p className="text-lg text-gray-500">
-                    Top 20 advance to the next league
-                  </p>
-                  <time className="font-bold text-yellow-400">
-                    {timeLeft()}
-                  </time>
-                </div>
-                <div className="w-full border-b-2 border-gray-200"></div>
+    <PageLayout
+      selectedTab="Leaderboards"
+      rightColumn={
+        !leaderboardIsUnlocked ? <LeaderboardExplanationSection /> : undefined
+      }
+    >
+      <div className="flex w-full max-w-xl flex-col items-center gap-5 md:px-5">
+        {!leaderboardIsUnlocked && (
+          <>
+            <LeaderboardBannerSvg />
+            <h1 className="text-center text-2xl font-bold text-gray-700">
+              Unlock Leaderboards!
+            </h1>
+            <p className="text-center text-lg text-gray-500">
+              Complete {lessonsRemainingToUnlockLeaderboard} more lesson
+              {lessonsRemainingToUnlockLeaderboard === 1 ? "" : "s"} to start
+              competing
+            </p>
+            <ButtonLink
+              variant="secondaryAccent"
+              size="none"
+              className="w-fit px-16 py-2 text-center"
+              href="/lesson?practice"
+            >
+              Start a lesson
+            </ButtonLink>
+            <div className="h-5"></div>
+            <LockedLeaderboardSvg />
+          </>
+        )}
+        {leaderboardIsUnlocked && (
+          <>
+            <div className="sticky top-top-bar -mt-top-bar flex w-full flex-col items-center gap-5 bg-white pt-top-bar sm:top-0">
+              <div className="flex items-center gap-5">
+                <BronzeLeagueSvg className="h-fit w-20" />
+                <LockedLeagueSvg />
+                <LockedLeagueSvg />
+                <LockedLeagueSvg />
+                <LockedLeagueSvg />
               </div>
-              <div className="w-full">
-                {leaderboardUsers.map((user, i) => {
-                  return (
-                    <LeaderboardProfile
-                      key={user.name}
-                      place={i + 1}
-                      name={user.name}
-                      xp={user.xp}
-                      isCurrentUser={user.isCurrentUser}
-                    />
-                  );
-                })}
+              <h1 className="text-2xl font-bold">{leaderboardLeague}</h1>
+              <div className="flex w-full flex-col items-center gap-1 pb-5">
+                <p className="text-lg text-gray-500">
+                  Top 20 advance to the next league
+                </p>
+                <time className="font-bold text-yellow-400">{timeLeft()}</time>
               </div>
-            </>
-          )}
-        </div>
-        {!leaderboardIsUnlocked && <LeaderboardExplanationSection />}
+              <div className="w-full border-b-2 border-divider"></div>
+            </div>
+            <div className="w-full">
+              {leaderboardUsers.map((user, i) => {
+                return (
+                  <LeaderboardProfile
+                    key={user.name}
+                    place={i + 1}
+                    name={user.name}
+                    xp={user.xp}
+                    isCurrentUser={user.isCurrentUser}
+                  />
+                );
+              })}
+            </div>
+          </>
+        )}
       </div>
-      <BottomBar selectedTab="Leaderboards" />
-    </div>
+    </PageLayout>
   );
 };
 

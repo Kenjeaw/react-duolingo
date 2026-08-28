@@ -1,3 +1,113 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  /**
+   * The two fixed bars, so the pages that have to leave room for them
+   * cannot drift from the bars' real heights. `PageLayout` is the only
+   * thing that should need these; the bars themselves set their own
+   * height from the same token.
+   */
+  /** TopBar. Mobile-only: the bar inside it is `sm:hidden`. */
+  --spacing-top-bar: 58px;
+  /** BottomBar: an 88px row plus its 2px top border. Hidden from `md`. */
+  --spacing-bottom-bar: 90px;
+
+  /**
+   * The app's stacking order, named so a call site says what layer it is
+   * on rather than picking a number and hoping. Anything that overlaps
+   * something else belongs on one of these; raw `z-*` numbers do not.
+   *
+   * Ordering, lowest first: content that floats over the page, then the
+   * fixed bars, then LeftBar (whose flyout escapes over the bars), then a
+   * modal's scrim and the modal itself.
+   *
+   * A value only ranks an element against others in the same stacking
+   * context, so a popover nested inside `nav` competes with its siblings,
+   * not with `modal`. Nesting is why `popover` is both the lowest layer
+   * and the right choice for a menu inside LeftBar.
+   */
+  --z-index-popover: 10;
+  --z-index-chrome: 20;
+  --z-index-nav: 30;
+  --z-index-scrim: 40;
+  --z-index-modal: 50;
+
+  /**
+   * The app's one green. Every green surface is a step on this ramp:
+   * primary CTAs, the lesson progress bar, correct-answer feedback,
+   * and Unit 1 — which shares the base/`dark` steps with the top bar, and
+   * is why the two look continuous. Do not reach for Tailwind's `green-*`
+   * for anything that reads as the brand; add a step here instead.
+   */
+  /**
+   * Sheen laid over the base — the highlight along the top of the
+   * lesson progress bar. The base mixed 25% with white.
+   */
+  --color-brand-light: #82d941;
+  --color-brand: #58cc02;
+  /** Bottom lip of a `brand` button. The base scaled to 80%. */
+  --color-brand-dark: #46a302;
+  /**
+   * Bottom lip of a `brand-dark` button, which only the marketing pages'
+   * deeper CTA needs. `brand-dark` scaled to 80%, continuing the ramp.
+   */
+  --color-brand-darker: #388202;
+  /**
+   * Pale wash behind correct-answer feedback, the counterpart to
+   * `bg-red-100` on a wrong answer. The base mixed 85% with white.
+   */
+  --color-brand-tint: #e6f7d9;
+
+  /**
+   * Deep blue surface for the logged-out marketing pages
+   * (`/` and `/register`) and the language header above them.
+   */
+  --color-marketing: #235390;
+  --color-marketing-hover: #204b82;
+  --color-marketing-border: #042c60;
+  --color-marketing-accent: #0a4a82;
+
+  /** Selected tab in LeftBar / BottomBar. */
+  --color-selected: #ddf4ff;
+  --color-selected-border: #84d8ff;
+
+  /**
+   * Hairline borders. `divider` is the app's one border colour: nav
+   * chrome, cards, outline buttons, section rules. `divider-strong` is the
+   * heavier edge that lifts a floating popover or dropdown off the
+   * content it covers — reach for it only when the element floats.
+   */
+  --color-divider: #e5e5e5;
+  --color-divider-strong: #d1d5db;
+
+  /** Locked lesson tiles on the learn path. */
+  --color-locked: #e5e5e5;
+  --color-locked-border: #b7b7b7;
+
+  /**
+   * Per-unit accent pairs. Unit 1 uses `brand`; these cover units 2
+   * and 3. Add a pair here before adding a unit to `utils/units.ts`.
+   */
+  --color-unit-purple: #ce82ff;
+  --color-unit-purple-dark: #a568cc;
+  --color-unit-teal: #00cd9c;
+  --color-unit-teal-dark: #00a47d;
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}

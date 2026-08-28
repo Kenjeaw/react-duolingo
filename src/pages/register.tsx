@@ -13,7 +13,7 @@ const Register: NextPage = () => {
   const setLanguage = useBoundStore((x) => x.setLanguage);
   return (
     <main
-      className="flex min-h-screen flex-col items-center bg-[#235390] text-white"
+      className="flex min-h-screen flex-col items-center bg-marketing text-white"
       style={{ backgroundImage: `url(${bgSnow.src})` }}
     >
       <LanguageHeader />

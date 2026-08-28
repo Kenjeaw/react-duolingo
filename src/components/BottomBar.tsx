@@ -1,3 +1,4 @@
+import type { JSX } from "react";
 import Link from "next/link";
 import { useBoundStore } from "~/hooks/useBoundStore";
 
@@ -162,8 +163,8 @@ export const useBottomBarItems = () => {
 export const BottomBar = ({ selectedTab }: { selectedTab: Tab | null }) => {
   const bottomBarItems = useBottomBarItems();
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-20 border-t-2 border-[#e5e5e5] bg-white md:hidden">
-      <ul className="flex h-[88px]">
+    <nav className="fixed bottom-0 left-0 right-0 z-chrome h-bottom-bar border-t-2 border-divider bg-white md:hidden">
+      <ul className="flex h-full">
         {bottomBarItems.map((item) => {
           return (
             <li
@@ -174,7 +175,7 @@ export const BottomBar = ({ selectedTab }: { selectedTab: Tab | null }) => {
                 href={item.href}
                 className={
                   item.name === selectedTab
-                    ? "rounded-xl border-2 border-[#84d8ff] bg-[#ddf4ff] px-2 py-1"
+                    ? "rounded-xl border-2 border-selected-border bg-selected px-2 py-1"
                     : "px-2 py-1"
                 }
               >

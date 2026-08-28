@@ -1,11 +1,14 @@
+import type { JSX } from "react";
 import { type NextPage } from "next";
 import Link from "next/link";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { UpArrowSvg } from "~/components/svgs/icons";
 import {
   ActiveBookSvg,
-  LockedBookSvg,
+  ActiveDumbbellSvg,
+  ActiveTreasureSvg,
+  ActiveTrophySvg,
   CheckmarkSvg,
-  LockedDumbbellSvg,
   FastForwardSvg,
   GoldenBookSvg,
   GoldenDumbbellSvg,
@@ -17,29 +20,25 @@ import {
   LessonCompletionSvg2,
   LessonCompletionSvg3,
   LockSvg,
-  StarSvg,
+  LockedBookSvg,
+  LockedDumbbellSvg,
   LockedTreasureSvg,
   LockedTrophySvg,
-  UpArrowSvg,
-  ActiveTreasureSvg,
-  ActiveTrophySvg,
-  ActiveDumbbellSvg,
   PracticeExerciseSvg,
-} from "~/components/Svgs";
-import { TopBar } from "~/components/TopBar";
-import { BottomBar } from "~/components/BottomBar";
+  StarSvg,
+} from "~/components/svgs/learn";
+import { TopBar, topBarHeight } from "~/components/TopBar";
 import { RightBar } from "~/components/RightBar";
-import { LeftBar } from "~/components/LeftBar";
+import { PageLayout } from "~/components/PageLayout";
 import { useRouter } from "next/router";
-import { LoginScreen, useLoginScreen } from "~/components/LoginScreen";
 import { useBoundStore } from "~/hooks/useBoundStore";
 import type { Tile, TileType, Unit } from "~/utils/units";
 import { units } from "~/utils/units";
+import { lessonsPerTile } from "~/utils/constants";
 
 type TileStatus = "LOCKED" | "ACTIVE" | "COMPLETE";
 
 const tileStatus = (tile: Tile, lessonsCompleted: number): TileStatus => {
-  const lessonsPerTile = 4;
   const tilesCompleted = Math.floor(lessonsCompleted / lessonsPerTile);
   const tiles = units.flatMap((unit) => unit.tiles);
   const tileIndex = tiles.findIndex((t) => t === tile);
@@ -186,13 +185,23 @@ const getTileColors = ({
   switch (status) {
     case "LOCKED":
       if (tileType === "fast-forward") return defaultColors;
-      return "border-[#b7b7b7] bg-[#e5e5e5]";
+      return "border-locked-border bg-locked";
     case "COMPLETE":
       return "border-yellow-500 bg-yellow-400";
     case "ACTIVE":
       return defaultColors;
   }
 };
+
+/**
+ * The shape shared by the tooltip's CTA in all three tile states. Only the
+ * colours differ between them, so they live at the call sites — but the box
+ * itself is defined once, or the states drift and the tooltip changes height
+ * as you move between tiles. It is not a `Button` variant because the ACTIVE
+ * state's label colour comes from the unit at runtime.
+ */
+const tileTooltipCtaClass =
+  "flex w-full items-center justify-center rounded-xl border-b-4 p-3 uppercase transition";
 
 const TileTooltip = ({
   selectedTile,
@@ -228,8 +237,8 @@ const TileTooltip = ({
   }, [selectedTile, tileTooltipRef, closeTooltip, index]);
 
   const unit = units.find((unit) => unit.unitNumber === unitNumber);
-  const activeBackgroundColor = unit?.backgroundColor ?? "bg-green-500";
-  const activeTextColor = unit?.textColor ?? "text-green-500";
+  const activeBackgroundColor = unit?.backgroundColor ?? "bg-brand";
+  const activeTextColor = unit?.textColor ?? "text-brand";
 
   return (
     <div
@@ -241,15 +250,14 @@ const TileTooltip = ({
     >
       <div
         className={[
-          "absolute z-30 flex w-[300px] flex-col gap-4 rounded-xl p-4 font-bold transition-all duration-300",
+          "absolute left-1/2 z-popover flex w-[300px] -translate-x-1/2 flex-col gap-4 rounded-xl p-4 font-bold transition-all duration-300",
           status === "ACTIVE"
             ? activeBackgroundColor
             : status === "LOCKED"
-              ? "border-2 border-gray-200 bg-gray-100"
+              ? "border-2 border-divider bg-gray-100"
               : "bg-yellow-400",
           index === selectedTile ? "top-4 scale-100" : "-top-14 scale-0",
         ].join(" ")}
-        style={{ left: "calc(50% - 150px)" }}
       >
         <div
           className={[
@@ -257,7 +265,7 @@ const TileTooltip = ({
             status === "ACTIVE"
               ? activeBackgroundColor
               : status === "LOCKED"
-                ? "border-l-2 border-t-2 border-gray-200 bg-gray-100"
+                ? "border-l-2 border-t-2 border-divider bg-gray-100"
                 : "bg-yellow-400",
           ].join(" ")}
           style={{
@@ -280,7 +288,8 @@ const TileTooltip = ({
           <Link
             href="/lesson"
             className={[
-              "flex w-full items-center justify-center rounded-xl border-b-4 border-gray-200 bg-white p-3 uppercase",
+              tileTooltipCtaClass,
+              "border-divider bg-white",
               activeTextColor,
             ].join(" ")}
           >
@@ -288,7 +297,10 @@ const TileTooltip = ({
           </Link>
         ) : status === "LOCKED" ? (
           <button
-            className="w-full rounded-xl bg-gray-200 p-3 uppercase text-gray-400"
+            className={[
+              tileTooltipCtaClass,
+              "border-gray-300 bg-gray-200 text-gray-400",
+            ].join(" ")}
             disabled
           >
             Locked
@@ -296,7 +308,10 @@ const TileTooltip = ({
         ) : (
           <Link
             href="/lesson"
-            className="flex w-full items-center justify-center rounded-xl border-b-4 border-yellow-200 bg-white p-3 uppercase text-yellow-400"
+            className={[
+              tileTooltipCtaClass,
+              "border-yellow-200 bg-white text-yellow-400",
+            ].join(" ")}
           >
             Practice +5 XP
           </Link>
@@ -407,7 +422,8 @@ const UnitSection = ({ unit }: { unit: Unit }): JSX.Element => {
                     );
                   case "treasure":
                     return (
-                      <div
+                      <button
+                        type="button"
                         className={[
                           "relative -mb-4",
                           getTileLeftClassName({
@@ -417,21 +433,18 @@ const UnitSection = ({ unit }: { unit: Unit }): JSX.Element => {
                           }),
                         ].join(" ")}
                         onClick={() => {
-                          if (status === "ACTIVE") {
-                            increaseLessonsCompleted(4);
-                            increaseLingots(1);
-                          }
+                          increaseLessonsCompleted(lessonsPerTile);
+                          increaseLingots(1);
                         }}
-                        role="button"
-                        tabIndex={status === "ACTIVE" ? 0 : undefined}
+                        disabled={status !== "ACTIVE"}
                         aria-hidden={status !== "ACTIVE"}
-                        aria-label={status === "ACTIVE" ? "Collect reward" : ""}
+                        aria-label="Collect reward"
                       >
                         {status === "ACTIVE" && (
                           <HoverLabel text="Open" textColor="text-yellow-400" />
                         )}
                         <TileIcon tileType={tile.type} status={status} />
-                      </div>
+                      </button>
                     );
                 }
               })()}
@@ -467,82 +480,106 @@ const UnitSection = ({ unit }: { unit: Unit }): JSX.Element => {
   );
 };
 
-const getTopBarColors = (
-  scrollY: number,
-): {
-  backgroundColor: `bg-${string}`;
-  borderColor: `border-${string}`;
-} => {
-  const defaultColors = {
-    backgroundColor: "bg-[#58cc02]",
-    borderColor: "border-[#46a302]",
-  } as const;
+const defaultTopBarColors = {
+  backgroundColor: "bg-brand",
+  borderColor: "border-brand-dark",
+} as const;
 
-  if (scrollY < 680) {
-    return defaultColors;
-  } else if (scrollY < 1830) {
-    return units[1] ?? defaultColors;
-  } else {
-    return units[2] ?? defaultColors;
-  }
+/**
+ * The unit whose section currently sits under the top bar, so the bar can take
+ * that unit's colour.
+ *
+ * This reads the headers' real positions rather than comparing `scrollY` against
+ * fixed pixel offsets: those offsets are measurements of how tall the units
+ * happen to render, and go stale the moment a tile, a unit, or the tile spacing
+ * changes. The observer only wakes up when a header crosses the bar.
+ */
+const useActiveUnitNumber = (): number => {
+  const [activeUnitNumber, setActiveUnitNumber] = useState(
+    units[0]?.unitNumber ?? 1,
+  );
+
+  useEffect(() => {
+    const headers = Array.from(
+      document.querySelectorAll<HTMLElement>("[data-unit-header]"),
+    );
+    if (headers.length === 0) return;
+
+    const recompute = () => {
+      const scrolledPast = headers.filter(
+        (header) => header.getBoundingClientRect().top <= topBarHeight,
+      );
+      // Before the first header reaches the bar, the first unit still owns it.
+      const current = scrolledPast[scrolledPast.length - 1] ?? headers[0];
+      const unitNumber = Number(current?.dataset.unitHeader);
+      if (!Number.isNaN(unitNumber)) setActiveUnitNumber(unitNumber);
+    };
+
+    const observer = new IntersectionObserver(recompute, {
+      rootMargin: `-${topBarHeight}px 0px 0px 0px`,
+    });
+    headers.forEach((header) => observer.observe(header));
+    recompute();
+    return () => observer.disconnect();
+  }, []);
+
+  return activeUnitNumber;
 };
 
 const Learn: NextPage = () => {
-  const { loginScreenState, setLoginScreenState } = useLoginScreen();
-
+  // Only drives the "jump to top" button's visibility.
   const [scrollY, setScrollY] = useState(0);
   useEffect(() => {
-    const updateScrollY = () => setScrollY(globalThis.scrollY ?? scrollY);
+    const updateScrollY = () => setScrollY(globalThis.scrollY ?? 0);
     updateScrollY();
-    document.addEventListener("scroll", updateScrollY);
+    document.addEventListener("scroll", updateScrollY, { passive: true });
     return () => document.removeEventListener("scroll", updateScrollY);
-  }, [scrollY]);
+  }, []);
 
-  const topBarColors = getTopBarColors(scrollY);
+  const activeUnitNumber = useActiveUnitNumber();
+  const activeUnit = units.find((unit) => unit.unitNumber === activeUnitNumber);
+  const topBarColors = {
+    backgroundColor:
+      activeUnit?.backgroundColor ?? defaultTopBarColors.backgroundColor,
+    borderColor: activeUnit?.borderColor ?? defaultTopBarColors.borderColor,
+  };
 
   return (
-    <>
-      <TopBar
-        backgroundColor={topBarColors.backgroundColor}
-        borderColor={topBarColors.borderColor}
-      />
-      <LeftBar selectedTab="Learn" />
-
-      <div className="flex justify-center gap-3 pt-14 sm:p-6 sm:pt-10 md:ml-24 lg:ml-64 lg:gap-12">
-        <div className="flex max-w-2xl grow flex-col">
-          {units.map((unit) => (
-            <UnitSection unit={unit} key={unit.unitNumber} />
-          ))}
-          <div className="sticky bottom-28 left-0 right-0 flex items-end justify-between">
-            <Link
-              href="/lesson?practice"
-              className="absolute left-4 flex h-16 w-16 items-center justify-center rounded-full border-2 border-b-4 border-gray-200 bg-white transition hover:bg-gray-50 hover:brightness-90 md:left-0"
+    <PageLayout
+      selectedTab="Learn"
+      topBar={
+        <TopBar
+          backgroundColor={topBarColors.backgroundColor}
+          borderColor={topBarColors.borderColor}
+        />
+      }
+      rightColumn={<RightBar />}
+    >
+      <div className="flex max-w-2xl grow flex-col">
+        <h1 className="sr-only">Learn</h1>
+        {units.map((unit) => (
+          <UnitSection unit={unit} key={unit.unitNumber} />
+        ))}
+        <div className="sticky bottom-28 left-0 right-0 flex items-end justify-between">
+          <Link
+            href="/lesson?practice"
+            className="absolute left-4 flex h-16 w-16 items-center justify-center rounded-full border-2 border-b-4 border-divider bg-white transition hover:bg-gray-50 hover:brightness-90 md:left-0"
+          >
+            <span className="sr-only">Practice exercise</span>
+            <PracticeExerciseSvg className="h-8 w-8" />
+          </Link>
+          {scrollY > 100 && (
+            <button
+              className="absolute right-4 flex h-14 w-14 items-center justify-center self-end rounded-2xl border-2 border-b-4 border-divider bg-white transition hover:bg-gray-50 hover:brightness-90 md:right-0"
+              onClick={() => scrollTo(0, 0)}
             >
-              <span className="sr-only">Practice exercise</span>
-              <PracticeExerciseSvg className="h-8 w-8" />
-            </Link>
-            {scrollY > 100 && (
-              <button
-                className="absolute right-4 flex h-14 w-14 items-center justify-center self-end rounded-2xl border-2 border-b-4 border-gray-200 bg-white transition hover:bg-gray-50 hover:brightness-90 md:right-0"
-                onClick={() => scrollTo(0, 0)}
-              >
-                <span className="sr-only">Jump to top</span>
-                <UpArrowSvg />
-              </button>
-            )}
-          </div>
+              <span className="sr-only">Jump to top</span>
+              <UpArrowSvg />
+            </button>
+          )}
         </div>
-        <RightBar />
       </div>
-
-      <div className="pt-[90px]"></div>
-
-      <BottomBar selectedTab="Learn" />
-      <LoginScreen
-        loginScreenState={loginScreenState}
-        setLoginScreenState={setLoginScreenState}
-      />
-    </>
+    </PageLayout>
   );
 };
 
@@ -585,12 +622,24 @@ const HoverLabel = ({
   const [width, setWidth] = useState(72);
 
   useEffect(() => {
-    setWidth(hoverElement.current?.clientWidth ?? width);
-  }, [hoverElement.current?.clientWidth, width]);
+    const element = hoverElement.current;
+    if (!element) return;
+    // A ref is not reactive, so this measures on mount and then whenever the
+    // label actually resizes - a late-loading font being the usual cause.
+    //
+    // The obvious simplification - `left-1/2 -translate-x-1/2`, which centres
+    // any width without measuring - does not work here: `animate-bounce`'s
+    // keyframes set `transform` outright, so they overwrite the translate on
+    // every frame. Centring has to go through `left` while the label bounces.
+    const observer = new ResizeObserver(() => setWidth(element.clientWidth));
+    observer.observe(element);
+    setWidth(element.clientWidth);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div
-      className={`absolute z-10 w-max animate-bounce rounded-lg border-2 border-gray-200 bg-white px-3 py-2 font-bold uppercase ${textColor}`}
+      className={`absolute z-popover w-max animate-bounce rounded-xl border-2 border-divider-strong bg-white px-3 py-2 font-bold uppercase ${textColor}`}
       style={{
         top: "-25%",
         left: `calc(50% - ${width / 2}px)`,
@@ -598,10 +647,7 @@ const HoverLabel = ({
       ref={hoverElement}
     >
       {text}
-      <div
-        className="absolute h-3 w-3 rotate-45 border-b-2 border-r-2 border-gray-200 bg-white"
-        style={{ left: "calc(50% - 8px)", bottom: "-8px" }}
-      ></div>
+      <div className="absolute -bottom-2 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 border-b-2 border-r-2 border-divider-strong bg-white"></div>
     </div>
   );
 };
@@ -617,9 +663,9 @@ const UnitHeader = ({
   backgroundColor: `bg-${string}`;
   borderColor: `border-${string}`;
 }) => {
-  const language = useBoundStore((x) => x.language);
   return (
     <article
+      data-unit-header={unitNumber}
       className={["max-w-2xl text-white sm:rounded-xl", backgroundColor].join(
         " ",
       )}
@@ -629,10 +675,9 @@ const UnitHeader = ({
           <h2 className="text-2xl font-bold">Unit {unitNumber}</h2>
           <p className="text-lg">{description}</p>
         </div>
-        <Link
-          href={`https://duolingo.com/guidebook/${language.code}/${unitNumber}`}
+        <div
           className={[
-            "flex items-center gap-3 rounded-2xl border-2 border-b-4 p-3 transition hover:text-gray-100",
+            "flex items-center gap-3 rounded-2xl border-2 p-3",
             borderColor,
           ].join(" ")}
         >
@@ -640,7 +685,7 @@ const UnitHeader = ({
           <span className="sr-only font-bold uppercase lg:not-sr-only">
             Guidebook
           </span>
-        </Link>
+        </div>
       </header>
     </article>
   );

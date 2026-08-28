@@ -2,7 +2,7 @@ import Link from "next/link";
 import React from "react";
 import { useBoundStore } from "~/hooks/useBoundStore";
 
-type SettingsTitle = ReturnType<typeof useSettingsPages>[number]["title"];
+export type SettingsTitle = ReturnType<typeof useSettingsPages>[number]["title"];
 
 const useSettingsPages = () => {
   const loggedIn = useBoundStore((x) => x.loggedIn);
@@ -25,7 +25,7 @@ export const SettingsRightNav = ({
 }) => {
   const settingsPages = useSettingsPages();
   return (
-    <div className="hidden h-fit w-80 flex-col gap-1 rounded-2xl border-2 border-gray-200 p-5 lg:flex">
+    <div className="hidden h-fit w-80 flex-col gap-1 rounded-2xl border-2 border-divider p-5 lg:flex">
       {settingsPages.map(({ title, href }) => {
         return (
           <Link

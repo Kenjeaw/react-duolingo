@@ -1,14 +1,26 @@
 import Link from "next/link";
-import { CloseSvg } from "./Svgs";
+import { CloseSvg } from "./svgs/icons";
+import { Button } from "./Button";
 import type { ComponentProps } from "react";
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useBoundStore } from "~/hooks/useBoundStore";
 import { useRouter } from "next/router";
 
 export const FacebookLogoSvg = (props: ComponentProps<"svg">) => {
   return (
-    <svg width="12" height="22" viewBox="0 0 12 22" {...props}>
-      <title>Fill 4</title>
+    <svg
+      width="12"
+      height="22"
+      viewBox="0 0 12 22"
+      aria-hidden={true}
+      {...props}
+    >
       <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
         <g fill="#3C5A99">
           <g>
@@ -50,7 +62,38 @@ export const GoogleLogoSvg = (props: ComponentProps<"svg">) => {
 
 export type LoginScreenState = "HIDDEN" | "LOGIN" | "SIGNUP";
 
-export const useLoginScreen = () => {
+type SetLoginScreenState = React.Dispatch<
+  React.SetStateAction<LoginScreenState>
+>;
+
+const LoginScreenContext = createContext<SetLoginScreenState>(() => undefined);
+
+/** Opens the app's single login screen. */
+export const useSetLoginScreenState = () => useContext(LoginScreenContext);
+
+/**
+ * Renders the one and only login screen. It is a full-screen overlay that stays
+ * mounted, so rendering it per page or per component would stack several copies
+ * of the same form on top of each other.
+ */
+export const LoginScreenProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const { loginScreenState, setLoginScreenState } = useLoginScreen();
+  return (
+    <LoginScreenContext.Provider value={setLoginScreenState}>
+      {children}
+      <LoginScreen
+        loginScreenState={loginScreenState}
+        setLoginScreenState={setLoginScreenState}
+      />
+    </LoginScreenContext.Provider>
+  );
+};
+
+const useLoginScreen = () => {
   const router = useRouter();
   const loggedIn = useBoundStore((x) => x.loggedIn);
   const queryState: LoginScreenState = (() => {
@@ -60,11 +103,17 @@ export const useLoginScreen = () => {
     return "HIDDEN";
   })();
   const [loginScreenState, setLoginScreenState] = useState(queryState);
-  useEffect(() => setLoginScreenState(queryState), [queryState]);
+  // Sync to the query-derived state during render rather than in an effect,
+  // per https://react.dev/learn/you-might-not-need-an-effect
+  const [prevQueryState, setPrevQueryState] = useState(queryState);
+  if (prevQueryState !== queryState) {
+    setPrevQueryState(queryState);
+    setLoginScreenState(queryState);
+  }
   return { loginScreenState, setLoginScreenState };
 };
 
-export const LoginScreen = ({
+const LoginScreen = ({
   loginScreenState,
   setLoginScreenState,
 }: {
@@ -78,6 +127,11 @@ export const LoginScreen = ({
   const setName = useBoundStore((x) => x.setName);
 
   const [ageTooltipShown, setAgeTooltipShown] = useState(false);
+
+  const emailLabel =
+    loginScreenState === "LOGIN"
+      ? "Email or username (optional)"
+      : "Email (optional)";
 
   const nameInputRef = useRef<null | HTMLInputElement>(null);
 
@@ -100,12 +154,12 @@ export const LoginScreen = ({
   return (
     <article
       className={[
-        "fixed inset-0 z-30 flex flex-col bg-white p-7 transition duration-300",
+        "fixed inset-0 z-modal flex flex-col bg-white p-7 transition-[opacity,visibility] duration-300",
         loginScreenState === "HIDDEN"
-          ? "pointer-events-none opacity-0"
-          : "opacity-100",
+          ? "pointer-events-none invisible opacity-0"
+          : "visible opacity-100",
       ].join(" ")}
-      aria-hidden={!loginScreenState}
+      aria-hidden={loginScreenState === "HIDDEN"}
     >
       <header className="flex flex-row-reverse justify-between sm:flex-row">
         <button
@@ -115,14 +169,16 @@ export const LoginScreen = ({
           <CloseSvg />
           <span className="sr-only">Close</span>
         </button>
-        <button
-          className="hidden rounded-2xl border-2 border-b-4 border-gray-200 px-4 py-3 text-sm font-bold uppercase text-blue-400 transition hover:bg-gray-50 hover:brightness-90 sm:block"
+        <Button
+          variant="secondaryAccent"
+          size="none"
+          className="hidden px-4 py-3 text-sm sm:block"
           onClick={() =>
             setLoginScreenState((x) => (x === "LOGIN" ? "SIGNUP" : "LOGIN"))
           }
         >
           {loginScreenState === "LOGIN" ? "Sign up" : "Login"}
-        </button>
+        </Button>
       </header>
       <div className="flex grow items-center justify-center">
         <div className="flex w-full flex-col gap-5 sm:w-96">
@@ -134,54 +190,49 @@ export const LoginScreen = ({
               <>
                 <div className="relative flex grow">
                   <input
-                    className="grow rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
+                    className="grow rounded-2xl border-2 border-divider bg-gray-50 px-4 py-3"
                     placeholder="Age (optional)"
+                    aria-label="Age (optional)"
                   />
                   <div className="absolute bottom-0 right-0 top-0 flex items-center justify-center pr-4">
-                    <div
-                      className="relative flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border-2 border-gray-200 text-gray-400"
+                    <button
+                      type="button"
+                      className="relative flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border-2 border-divider text-gray-400"
                       onMouseEnter={() => setAgeTooltipShown(true)}
                       onMouseLeave={() => setAgeTooltipShown(false)}
                       onClick={() => setAgeTooltipShown((x) => !x)}
-                      role="button"
-                      tabIndex={0}
                       aria-label="Why do you need an age?"
+                      aria-expanded={ageTooltipShown}
                     >
                       ?
                       {ageTooltipShown && (
-                        <div className="absolute -right-5 top-full z-10 w-72 rounded-2xl border-2 border-gray-200 bg-white p-4 text-center text-xs leading-5 text-gray-800">
+                        <div className="absolute -right-5 top-full z-popover w-72 rounded-2xl border-2 border-divider bg-white p-4 text-center text-xs leading-5 text-gray-800">
                           Providing your age ensures you get the right Duolingo
-                          experience. For more details, please visit our{" "}
-                          <Link
-                            href="https://www.duolingo.com/privacy"
-                            className="text-blue-700"
-                          >
-                            Privacy Policy
-                          </Link>
+                          experience. For more details, please visit our Privacy
+                          Policy.
                         </div>
                       )}
-                    </div>
+                    </button>
                   </div>
                 </div>
                 <input
-                  className="grow rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
+                  className="grow rounded-2xl border-2 border-divider bg-gray-50 px-4 py-3"
                   placeholder="Name (optional)"
+                  aria-label="Name (optional)"
                   ref={nameInputRef}
                 />
               </>
             )}
             <input
-              className="grow rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
-              placeholder={
-                loginScreenState === "LOGIN"
-                  ? "Email or username (optional)"
-                  : "Email (optional)"
-              }
+              className="grow rounded-2xl border-2 border-divider bg-gray-50 px-4 py-3"
+              placeholder={emailLabel}
+              aria-label={emailLabel}
             />
             <div className="relative flex grow">
               <input
-                className="grow rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
+                className="grow rounded-2xl border-2 border-divider bg-gray-50 px-4 py-3"
                 placeholder="Password (optional)"
+                aria-label="Password (optional)"
                 type="password"
               />
               {loginScreenState === "LOGIN" && (
@@ -196,47 +247,37 @@ export const LoginScreen = ({
               )}
             </div>
           </div>
-          <button
-            className="rounded-2xl border-b-4 border-blue-500 bg-blue-400 py-3 font-bold uppercase text-white transition hover:brightness-110"
-            onClick={logInAndSetUserProperties}
-          >
+          <Button variant="info" onClick={logInAndSetUserProperties}>
             {loginScreenState === "LOGIN" ? "Log in" : "Create account"}
-          </button>
+          </Button>
           <div className="flex items-center gap-2">
             <div className="h-[2px] grow bg-gray-300"></div>
             <span className="font-bold uppercase text-gray-400">or</span>
             <div className="h-[2px] grow bg-gray-300"></div>
           </div>
           <div className="flex gap-5">
-            <button
-              className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-b-4 border-gray-200 py-3 font-bold text-blue-900 transition hover:bg-gray-50 hover:brightness-90"
+            <Button
+              variant="secondaryAccent"
+              size="none"
+              fullWidth
+              className="gap-2 py-3"
               onClick={logInAndSetUserProperties}
             >
               <FacebookLogoSvg className="h-5 w-5" /> Facebook
-            </button>
-            <button
-              className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-b-4 border-gray-200 py-3 font-bold text-blue-600 transition hover:bg-gray-50 hover:brightness-90"
+            </Button>
+            <Button
+              variant="secondaryAccent"
+              size="none"
+              fullWidth
+              className="gap-2 py-3"
               onClick={logInAndSetUserProperties}
             >
               <GoogleLogoSvg className="h-5 w-5" /> Google
-            </button>
+            </Button>
           </div>
           <p className="text-center text-xs leading-5 text-gray-400">
-            By signing in to Duolingo, you agree to our{" "}
-            <Link
-              className="font-bold"
-              href="https://www.duolingo.com/terms?wantsPlainInfo=1"
-            >
-              Terms
-            </Link>{" "}
-            and{" "}
-            <Link
-              className="font-bold"
-              href="https://www.duolingo.com/privacy?wantsPlainInfo=1"
-            >
-              Privacy Policy
-            </Link>
-            .
+            By signing in to Duolingo, you agree to our Terms and Privacy
+            Policy.
           </p>
           <p className="text-center text-xs leading-5 text-gray-400">
             This site is protected by reCAPTCHA Enterprise and the Google{" "}
