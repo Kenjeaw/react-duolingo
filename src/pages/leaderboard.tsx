@@ -17,7 +17,6 @@ import dayjs from "dayjs";
 import { useRouter } from "next/router";
 import { useLeaderboardUsers } from "~/hooks/useLeaderboard";
 import { lessonsToUnlockLeaderboard } from "~/utils/constants";
-import Image from "next/image";
 
 const LeaderboardExplanationSection = () => {
   return (
@@ -66,7 +65,60 @@ const timeLeft = (): `${number} ${TimeLeftUnit}` => {
   return `${timeUntilStartOfWeek("minutes")} minutes`;
 };
 
-const defaultPicture = "https://placekitten.com/100/100";
+/**
+ * Avatar fills, drawn from the palette the rest of the app already uses. Every
+ * one is written out in full: Tailwind finds class names by scanning the source
+ * text, so a class assembled at runtime is never generated.
+ */
+const avatarColors = [
+  "bg-brand",
+  "bg-unit-purple",
+  "bg-unit-teal",
+  "bg-marketing",
+  "bg-blue-400",
+  "bg-orange-400",
+  "bg-red-500",
+  "bg-yellow-400",
+] as const;
+
+/**
+ * A stable fill for a name, so a reader keeps the same avatar between renders
+ * and between sessions. Any spread-out mapping would do — this one only has to
+ * be deterministic, not unguessable.
+ */
+const avatarColor = (name: string): string => {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = (hash * 31 + name.charCodeAt(i)) | 0;
+  }
+  return avatarColors[Math.abs(hash) % avatarColors.length] ?? avatarColors[0];
+};
+
+/**
+ * The reader's initial on a coloured disc, matching how `/profile` stands in
+ * for a missing profile picture.
+ *
+ * This deliberately draws rather than fetches. The avatars here used to come
+ * from a placeholder image host, which has since gone off the air and took
+ * every row's picture with it — an avatar is chrome, and chrome should not be
+ * able to break because someone else's server did.
+ *
+ * Hidden from assistive tech: it encodes the first letter of the name that is
+ * already sitting next to it as text.
+ */
+const LeaderboardAvatar = ({ name }: { name: string }) => {
+  return (
+    <div
+      className={[
+        "flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-xl font-bold text-white",
+        avatarColor(name),
+      ].join(" ")}
+      aria-hidden={true}
+    >
+      {name.charAt(0).toUpperCase()}
+    </div>
+  );
+};
 
 const LeaderboardProfile = ({
   place,
@@ -98,13 +150,7 @@ const LeaderboardProfile = ({
             {place}
           </div>
         )}
-        <Image
-          width={48}
-          height={48}
-          className="h-12 w-12 rounded-full"
-          src={defaultPicture}
-          alt=""
-        />
+        <LeaderboardAvatar name={name} />
       </div>
       <div className="grow overflow-hidden overflow-ellipsis font-bold">
         {name}
